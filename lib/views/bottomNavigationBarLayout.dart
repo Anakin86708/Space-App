@@ -5,7 +5,6 @@ import 'package:space_app/views/astronauts_page/astronautsPage.dart';
 import 'package:space_app/views/favorite_page/favoritePage.dart';
 import 'package:space_app/views/initial_page/initialPage.dart';
 import 'package:space_app/views/interfacePage.dart';
-import 'package:space_app/views/post_page/postPage.dart';
 import 'package:space_app/views/settings_page/settingsPage.dart';
 
 class BottomNavegationBarLayout extends StatefulWidget {
@@ -33,6 +32,7 @@ class _BottomNavegationBarLayoutState extends State<BottomNavegationBarLayout> {
       backgroundColor: AppTheme.theme.backgroundColor,
       appBar: AppBar(
         title: Text('SpaceApp', style: TextStyle(color: AppColors.secondary)),
+        brightness: Brightness.dark,
       ),
       body: _pages[_currentPage],
       bottomNavigationBar: generateBottomNavegationBar(),

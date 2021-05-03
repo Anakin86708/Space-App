@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:space_app/model/postData.dart';
 import 'package:space_app/theme/appColors.dart';
 import 'package:space_app/theme/themeData.dart';
 import 'package:space_app/views/interfacePage.dart';
@@ -6,6 +7,9 @@ import 'package:space_app/views/interfacePage.dart';
 class PostPage extends StatefulWidget implements InterfacePage {
   Icon _pageIcon = Icon(Icons.stroller);
   String _pageName = 'Post Page';
+  final PostData data;
+
+  PostPage(this.data);
 
   @override
   State<StatefulWidget> createState() {
@@ -13,18 +17,21 @@ class PostPage extends StatefulWidget implements InterfacePage {
   }
 
   @override
-  // TODO: implement pageIcon
   Icon get pageIcon => _pageIcon;
 
   @override
-  // TODO: implement pageName
   String get pageName => _pageName;
 }
 
 class PostPageState extends State<PostPage> {
   @override
   Widget build(BuildContext context) {
-    return post();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.data.title),
+      ),
+      body: post(),
+    );
   }
 
   Widget post() {
@@ -72,7 +79,7 @@ class PostPageState extends State<PostPage> {
 
   Text _generateTitle() {
     return Text(
-      "Titulo",
+      widget.data.title,
       style: AppTheme.postStyle["titleStyle"],
     );
   }
