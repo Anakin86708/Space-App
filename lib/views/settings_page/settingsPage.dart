@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:space_app/bloc/settingState.dart';
+import 'package:space_app/bloc/settingsBloc.dart';
+import 'package:space_app/bloc/settingsEvent.dart';
 import 'package:space_app/model/settingsData.dart';
 import 'package:space_app/theme/appColors.dart';
 
@@ -8,36 +12,40 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  static SettingsData data = new SettingsData();
+  SettingsData data;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Ajustes'),
-      ),
-      body: _generateListSettings(),
-    );
+        appBar: AppBar(
+          title: Text('Ajustes'),
+        ),
+        body: BlocProvider(
+          create: (BuildContext context) => SettingsBloc(),
+          child: BlocBuilder<SettingsBloc, SettingsState>(
+              builder: (BuildContext context, SettingsState state) {
+            this.data = state.data;
+            return _generateListSettings(context, state);
+          }),
+        ));
   }
 
-  Widget _generateListSettings() {
+  Widget _generateListSettings(BuildContext context, SettingsState state) {
     return ListView(
       children: [
-        _eventNotificationItem(),
-        _onlyFavoriteItem(),
-        _updateFrequencyItem(),
+        _eventNotificationItem(context, state),
+        _onlyFavoriteItem(context, state),
+        _updateFrequencyItem(context, state),
+        _saveButtonItem(context, state)
       ],
     );
   }
 
-  ListTile _eventNotificationItem() {
-    return _generateSettingsItem();
-  }
-
-  ListTile _generateSettingsItem() {
+  ListTile _eventNotificationItem(BuildContext context, SettingsState state) {
     return ListTile(
       title: Text('Notificação de eventos'),
       trailing: Switch(
-        value: data.eventNotificationsState,
+        value: state.data.eventNotificationsState,
         onChanged: (bool value) {
           setState(() {
             data.eventNotificationsState = value;
@@ -48,11 +56,11 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  ListTile _onlyFavoriteItem() {
+  ListTile _onlyFavoriteItem(BuildContext context, SettingsState state) {
     return ListTile(
       title: Text('Apenas eventos favoritos'),
       trailing: Switch(
-        value: data.onlyFavoriteState,
+        value: state.data.onlyFavoriteState,
         onChanged: data.eventNotificationsState
             ? (bool value) {
                 setState(() {
@@ -65,11 +73,11 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  ListTile _updateFrequencyItem() {
+  ListTile _updateFrequencyItem(BuildContext context, SettingsState state) {
     return ListTile(
       title: Text('Frequência de atualização'),
       trailing: DropdownButton<String>(
-        value: data.updateFrequencyValue,
+        value: state.data.updateFrequencyValue,
         items: _generateListItens(),
         onChanged: (value) {
           setState(() {
@@ -89,4 +97,17 @@ class _SettingsPageState extends State<SettingsPage> {
       SettingsData.avaliableUpdatesFrequency
           .map((e) => new DropdownMenuItem(value: e, child: Text(e)))
           .toList();
+
+  Widget _saveButtonItem(BuildContext context, SettingsState state) {
+    double padding = 100;
+    return Padding(
+      padding: EdgeInsets.only(right: padding, left: padding),
+      child: ElevatedButton(
+        onPressed: () {
+          BlocProvider.of<SettingsBloc>(context).add(UpdateEvent(data));
+        },
+        child: Text('Save'),
+      ),
+    );
+  }
 }

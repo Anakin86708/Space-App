@@ -3,16 +3,16 @@ import 'package:space_app/bloc/settingState.dart';
 import 'package:space_app/bloc/settingsEvent.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
-  SettingsBloc() : super(ViewState());
+  SettingsBloc() : super(SettingsState(// TODO: colocar chamada pro db));
 
   @override
   Stream<SettingsState> mapEventToState(SettingsEvent event) async* {
-    if (event is EditEvent) {
-      yield EditState();
-    } else if (event is SaveEvent) {
-      yield SaveState(data: event.data);
-    } else if (event is ViewEvent) {
-      yield ViewState();
+    if (event is ViewEvent) {
+      // Será solicitado info do DB
+      yield SettingsState();
+    } else if (event is UpdateEvent) {
+      // Será feito o update no DB
+      yield SettingsState();
     }
   }
 }
