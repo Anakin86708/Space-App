@@ -14,6 +14,9 @@ class SettingsData {
 
   get eventNotificationsState => _eventNotificationsState;
   set eventNotificationsState(value) {
+    if (value is int) {
+      value = value == 1 ? true : false;
+    }
     _eventNotificationsState = value;
     // Permite desligar o switch de favoritos junto ao de notificação
     if (!value) {

@@ -11,11 +11,12 @@ class DatabaseLocalServer {
 
   static Database _database;
 
-  String tableName = 'Settings';
-  String colEventNotificationState = 'event_notification';
-  String colOnlyFavoriteState = 'only_favorite';
-  String colUpdateFrequencyState = 'update_frequency';
-  int sizeColUpdate = 20;
+  String _tableName = 'Settings';
+  String _colEventNotificationState = 'event_notification';
+  String _colOnlyFavoriteState = 'only_favorite';
+  String _colUpdateFrequencyState = 'update_frequency';
+  int _sizeColUpdate = 20;
+  int _id = 1;
 
   Future<Database> get database async {
     if (_database == null) {
@@ -26,7 +27,7 @@ class DatabaseLocalServer {
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + "notes.db";
+    String path = directory.path + "settings.db";
 
     Database notesDatabase =
         await openDatabase(path, version: 1, onCreate: _createDb);
@@ -35,20 +36,26 @@ class DatabaseLocalServer {
 
   _createDb(Database db, int newVersion) async {
     await db.execute(
-        "CREATE TABLE $tableName (id INTEGER PRIMARY KEY, $colEventNotificationState BIT, $colOnlyFavoriteState BIT, $colUpdateFrequencyState CHARACTERE($sizeColUpdate))");
-    await db.execute(
-        "INSERT INTO $tableName (id, $colEventNotificationState, $colOnlyFavoriteState, $colUpdateFrequencyState) VALUES (0, 0, 0, ${SettingsData.avaliableUpdatesFrequency[0]})");
+        "CREATE TABLE $_tableName (id INTEGER PRIMARY KEY, $_colEventNotificationState INT, $_colOnlyFavoriteState INT, $_colUpdateFrequencyState TEXT)");
+    print(SettingsData.avaliableUpdatesFrequency[0]);
+    await db.insert(_tableName, {
+      'id': _id,
+      _colEventNotificationState: 0,
+      _colOnlyFavoriteState: 0,
+      _colUpdateFrequencyState: SettingsData.avaliableUpdatesFrequency[0],
+    });
   }
 
   Future<SettingsData> getSettingsData() async {
     Database db = await this.database;
-    var settingsMapList = await db.rawQuery("SELECT * FROM $tableName");
+    var settingsMapList = await db.rawQuery("SELECT * FROM $_tableName");
 
     SettingsData data = new SettingsData();
     data.eventNotificationsState =
-        settingsMapList[0][colEventNotificationState];
-    data.onlyFavoriteState = settingsMapList[0][colOnlyFavoriteState];
-    data.updateFrequencyValue = settingsMapList[0][colUpdateFrequencyState];
+        settingsMapList[0][_colEventNotificationState] == 1 ? true : false;
+    data.onlyFavoriteState =
+        settingsMapList[0][_colOnlyFavoriteState] == 1 ? true : false;
+    data.updateFrequencyValue = settingsMapList[0][_colUpdateFrequencyState];
     return data;
   }
 
@@ -56,21 +63,21 @@ class DatabaseLocalServer {
   Future<int> updateNote(SettingsData data) async {
     Database db = await this.database;
     var result = await db.update(
-      tableName,
+      _tableName,
       _convertDataToMap(data),
       where: "id = ?",
-      whereArgs: [0],
+      whereArgs: [_id],
     );
     notify();
     return result;
   }
 
   Map<String, Object> _convertDataToMap(SettingsData data) {
-    var convertedMap = {};
-    convertedMap[colEventNotificationState] =
+    Map<String, Object> convertedMap = {};
+    convertedMap[_colEventNotificationState] =
         data.eventNotificationsState ? 1 : 0;
-    convertedMap[colOnlyFavoriteState] = data.onlyFavoriteState ? 1 : 0;
-    convertedMap[colUpdateFrequencyState] = data.updateFrequencyValue;
+    convertedMap[_colOnlyFavoriteState] = data.onlyFavoriteState ? 1 : 0;
+    convertedMap[_colUpdateFrequencyState] = data.updateFrequencyValue;
 
     return convertedMap;
   }
