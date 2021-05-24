@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:space_app/bloc/database/databaseBloc.dart';
+import 'package:space_app/bloc/database/databaseEvents.dart';
+import 'package:space_app/bloc/database/databaseStates.dart';
 import 'package:space_app/model/settingsData.dart';
 import 'package:space_app/theme/appColors.dart';
 
@@ -8,23 +12,34 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  static SettingsData data = new SettingsData();
+  SettingsData data = new SettingsData();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Ajustes'),
       ),
-      body: _generateListSettings(),
+      // Tire esse bloc daqui
+      body: MultiBlocProvider(providers: [
+        BlocProvider(create: (_) => DatabaseBloc()),
+      ], child: BlocListener<DatabaseBloc, DatabaseStates>(listener: (context, state) {
+        if (state is UpdateState) {
+          setState(() {
+            this.data = state.data;
+          });
+        }
+      },child: BlocBuilder<DatabaseBloc, DatabaseStates>(builder: (BuildContext context, state) =>  _generateListSettings(context, state),
+      ))),
     );
   }
 
-  Widget _generateListSettings() {
+  Widget _generateListSettings(BuildContext context, state) {
     return ListView(
       children: [
         _eventNotificationItem(),
         _onlyFavoriteItem(),
         _updateFrequencyItem(),
+        _saveButtonItem(context),
       ],
     );
   }
@@ -89,4 +104,17 @@ class _SettingsPageState extends State<SettingsPage> {
       SettingsData.avaliableUpdatesFrequency
           .map((e) => new DropdownMenuItem(value: e, child: Text(e)))
           .toList();
+
+  Widget _saveButtonItem(BuildContext context) {
+    double padding = 100;
+    return Padding(
+      padding: EdgeInsets.only(right: padding, left: padding),
+      child: ElevatedButton(
+        onPressed: () {
+          BlocProvider.of<DatabaseBloc>(context).add(UpdateSettingsEvent(data));
+        },
+        child: Text('Save'),
+      ),
+    );
+  }
 }

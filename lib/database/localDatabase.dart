@@ -69,6 +69,7 @@ class DatabaseLocalServer {
       where: "id = ?",
       whereArgs: [_id],
     );
+    print('Atualizado DB');
     notify();
     return result;
   }
