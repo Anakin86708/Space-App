@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:space_app/bloc/settingState.dart';
-import 'package:space_app/bloc/settingsBloc.dart';
-import 'package:space_app/bloc/settingsEvent.dart';
+import 'package:space_app/bloc/settings/settingState.dart';
+import 'package:space_app/bloc/settings/settingsBloc.dart';
+import 'package:space_app/bloc/settings/settingsEvent.dart';
 import 'package:space_app/model/settingsData.dart';
 import 'package:space_app/theme/appColors.dart';
 
