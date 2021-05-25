@@ -10,7 +10,8 @@ class SettingsBloc extends Bloc<SettingsEvents, SettingsStates> {
   StreamSubscription _localSubscription;
 
   SettingsBloc() : super(ViewState()) {
-    // add(GetSettingsEvent());
+    add(GetSettingsEvent());
+    print('bloc do settings');
     _localSubscription = DatabaseLocalServer.helper.stream.listen((event) {
       SettingsData data = event;
       add(GetSettingsEvent(data: data));

@@ -4,7 +4,9 @@ import 'package:space_app/bloc/database/databaseStates.dart';
 import 'package:space_app/database/localDatabase.dart';
 
 class DatabaseBloc extends Bloc<DatabaseEvents, DatabaseStates> {
-  DatabaseBloc() : super(InitialState());
+  DatabaseBloc() : super(InitialState()){
+    print('bloc do database');
+  }
 
   @override
   Stream<DatabaseStates> mapEventToState(DatabaseEvents event) async* {
@@ -14,5 +16,4 @@ class DatabaseBloc extends Bloc<DatabaseEvents, DatabaseStates> {
       yield UpdateState(event.data);
     }
   }
-
 }
