@@ -14,4 +14,5 @@ class DatabaseBloc extends Bloc<DatabaseEvents, DatabaseStates> {
       yield UpdateState(event.data);
     }
   }
+
 }

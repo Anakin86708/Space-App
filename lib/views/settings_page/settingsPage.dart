@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:space_app/bloc/database/databaseBloc.dart';
 import 'package:space_app/bloc/database/databaseEvents.dart';
 import 'package:space_app/bloc/database/databaseStates.dart';
+import 'package:space_app/bloc/settings/settingsBloc.dart';
+import 'package:space_app/bloc/settings/settingsStates.dart';
 import 'package:space_app/model/settingsData.dart';
 import 'package:space_app/theme/appColors.dart';
 
@@ -20,35 +22,38 @@ class _SettingsPageState extends State<SettingsPage> {
         title: Text('Ajustes'),
       ),
       // Tire esse bloc daqui
-      body: MultiBlocProvider(providers: [
-        BlocProvider(create: (_) => DatabaseBloc()),
-      ], child: BlocListener<DatabaseBloc, DatabaseStates>(listener: (context, state) {
-        if (state is UpdateState) {
-          setState(() {
-            this.data = state.data;
-          });
-        }
-      },child: BlocBuilder<DatabaseBloc, DatabaseStates>(builder: (BuildContext context, state) =>  _generateListSettings(context, state),
-      ))),
+      body: MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => DatabaseBloc()),
+            BlocProvider(create: (_) => SettingsBloc()),
+          ],
+          child: BlocListener<DatabaseBloc, DatabaseStates>(
+              listener: (context, state) {
+                if (state is UpdateState) {
+                  setState(() {
+                    this.data = state.data;
+                  });
+                }
+              },
+              child: BlocBuilder<SettingsBloc, SettingsStates>(
+                builder: (BuildContext context, state) =>
+                    _generateListSettings(context, state),
+              ))),
     );
   }
 
   Widget _generateListSettings(BuildContext context, state) {
     return ListView(
       children: [
-        _eventNotificationItem(),
-        _onlyFavoriteItem(),
-        _updateFrequencyItem(),
+        _eventNotificationItem(context, state),
+        _onlyFavoriteItem(context, state),
+        _updateFrequencyItem(context, state),
         _saveButtonItem(context),
       ],
     );
   }
 
-  ListTile _eventNotificationItem() {
-    return _generateSettingsItem();
-  }
-
-  ListTile _generateSettingsItem() {
+  ListTile _eventNotificationItem(BuildContext context, state) {
     return ListTile(
       title: Text('Notificação de eventos'),
       trailing: Switch(
@@ -63,7 +68,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  ListTile _onlyFavoriteItem() {
+  ListTile _onlyFavoriteItem(BuildContext context, state) {
     return ListTile(
       title: Text('Apenas eventos favoritos'),
       trailing: Switch(
@@ -80,7 +85,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  ListTile _updateFrequencyItem() {
+  ListTile _updateFrequencyItem(BuildContext context, state) {
     return ListTile(
       title: Text('Frequência de atualização'),
       trailing: DropdownButton<String>(
