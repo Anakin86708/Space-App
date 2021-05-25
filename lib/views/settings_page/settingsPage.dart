@@ -14,7 +14,9 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  SettingsData data = new SettingsData();
+  SettingsData _data = new SettingsData();
+  final GlobalKey<FormState> formKey = new GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,34 +24,32 @@ class _SettingsPageState extends State<SettingsPage> {
         title: Text('Ajustes'),
       ),
       // Tire esse bloc daqui
-      body: MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (_) => DatabaseBloc()),
-            BlocProvider(create: (_) => SettingsBloc()),
-          ],
-          child: BlocListener<DatabaseBloc, DatabaseStates>(
-              listener: (context, state) {
-                if (state is UpdateState) {
-                  setState(() {
-                    this.data = state.data;
-                  });
-                }
-              },
-              child: BlocBuilder<SettingsBloc, SettingsStates>(
-                builder: (BuildContext context, state) =>
-                    _generateListSettings(context, state),
-              ))),
+      body: BlocListener<SettingsBloc, SettingsStates>(
+          listener: (context, state) {
+            if (state is UpdateViewState) {
+              setState(() {
+                this._data = state.data;
+              });
+            }
+          },
+          child: BlocBuilder<SettingsBloc, SettingsStates>(
+            builder: (BuildContext context, state) =>
+                _generateListSettings(context, state),
+          )),
     );
   }
 
   Widget _generateListSettings(BuildContext context, state) {
-    return ListView(
-      children: [
-        _eventNotificationItem(context, state),
-        _onlyFavoriteItem(context, state),
-        _updateFrequencyItem(context, state),
-        _saveButtonItem(context),
-      ],
+    return Form(
+      key: formKey,
+          child: ListView(
+        children: [
+          _eventNotificationItem(context, state),
+          _onlyFavoriteItem(context, state),
+          _updateFrequencyItem(context, state),
+          // _saveButtonItem(context),
+        ],
+      ),
     );
   }
 
@@ -57,12 +57,10 @@ class _SettingsPageState extends State<SettingsPage> {
     return ListTile(
       title: Text('Notificação de eventos'),
       trailing: Switch(
-        value: data.eventNotificationsState,
+        value: state.data.eventNotificationsState,
         onChanged: (bool value) {
-          setState(() {
-            data.eventNotificationsState = value;
-          });
-          print(data);
+            state.data.eventNotificationsState = value;
+          print(_data);
         },
       ),
     );
@@ -72,13 +70,11 @@ class _SettingsPageState extends State<SettingsPage> {
     return ListTile(
       title: Text('Apenas eventos favoritos'),
       trailing: Switch(
-        value: data.onlyFavoriteState,
-        onChanged: data.eventNotificationsState
+        value: state.data.onlyFavoriteState,
+        onChanged: state.data.eventNotificationsState
             ? (bool value) {
-                setState(() {
-                  data.onlyFavoriteState = value;
-                });
-                print(data);
+                  state.data.onlyFavoriteState = value;
+                print(_data);
               }
             : null,
       ),
@@ -89,13 +85,11 @@ class _SettingsPageState extends State<SettingsPage> {
     return ListTile(
       title: Text('Frequência de atualização'),
       trailing: DropdownButton<String>(
-        value: data.updateFrequencyValue,
+        value: state.data.updateFrequencyValue,
         items: _generateListItens(),
         onChanged: (value) {
-          setState(() {
-            data.updateFrequencyValue = value;
-          });
-          print(data);
+            state.data.updateFrequencyValue = value;
+          print(_data);
         },
         underline: Container(
           color: AppColors.accent,
@@ -116,7 +110,7 @@ class _SettingsPageState extends State<SettingsPage> {
       padding: EdgeInsets.only(right: padding, left: padding),
       child: ElevatedButton(
         onPressed: () {
-          BlocProvider.of<DatabaseBloc>(context).add(UpdateSettingsEvent(data));
+          BlocProvider.of<DatabaseBloc>(context).add(UpdateSettingsEvent(_data));
         },
         child: Text('Save'),
       ),

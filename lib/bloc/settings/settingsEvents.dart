@@ -8,3 +8,10 @@ class GetSettingsEvent extends SettingsEvents {
     this.data = data ?? SettingsData();
   }
 }
+
+class UpdateSettingsEvent extends SettingsEvents {
+  SettingsData data;
+  UpdateSettingsEvent({SettingsData data}) {
+    this.data = data ?? SettingsData();
+  }
+}
