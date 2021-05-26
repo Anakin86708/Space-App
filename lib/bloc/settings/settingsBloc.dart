@@ -10,19 +10,21 @@ class SettingsBloc extends Bloc<SettingsEvents, SettingsStates> {
   StreamSubscription _localSubscription;
 
   SettingsBloc() : super(ViewState()) {
-    add(GetSettingsEvent());
+    add(GetDatabaseSettingsEvent());
     print('bloc do settings');
     _localSubscription = DatabaseLocalServer.helper.stream.listen((event) {
       SettingsData data = event;
-      add(GetSettingsEvent(data: data));
+      add(UpdateSettingsEvent(data: data));
     });
   }
 
   @override
   Stream<SettingsStates> mapEventToState(SettingsEvents event) async* {
-    if (event is GetSettingsEvent) {
+    if (event is GetDatabaseSettingsEvent) {
       SettingsData data = await DatabaseLocalServer.helper.getSettingsData();
       yield ViewState(data: data);
+    } else if (event is UpdateSettingsEvent) {
+      yield ViewState(data: event.data);
     }
   }
 

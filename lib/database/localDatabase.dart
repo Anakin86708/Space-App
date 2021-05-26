@@ -56,7 +56,6 @@ class DatabaseLocalServer {
     data.onlyFavoriteState =
         settingsMapList[0][_colOnlyFavoriteState] == 1 ? true : false;
     data.updateFrequencyValue = settingsMapList[0][_colUpdateFrequencyState];
-    notify();
     print("asdf $data");
     return data;
   }

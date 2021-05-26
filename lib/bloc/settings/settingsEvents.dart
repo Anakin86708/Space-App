@@ -2,9 +2,9 @@ import 'package:space_app/model/settingsData.dart';
 
 abstract class SettingsEvents {}
 
-class GetSettingsEvent extends SettingsEvents {
+class GetDatabaseSettingsEvent extends SettingsEvents {
   SettingsData data;
-  GetSettingsEvent({SettingsData data}) {
+  GetDatabaseSettingsEvent({SettingsData data}) {
     this.data = data ?? SettingsData();
   }
 }
