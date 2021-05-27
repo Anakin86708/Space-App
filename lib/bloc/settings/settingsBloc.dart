@@ -1,32 +1,35 @@
 import 'dart:async';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:space_app/bloc/settings/settingState.dart';
-import 'package:space_app/bloc/settings/settingsEvent.dart';
+import 'package:bloc/bloc.dart';
+import 'package:space_app/bloc/settings/settingsEvents.dart';
+import 'package:space_app/bloc/settings/settingsStates.dart';
 import 'package:space_app/database/localDatabase.dart';
 import 'package:space_app/model/settingsData.dart';
 
-class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
+class SettingsBloc extends Bloc<SettingsEvents, SettingsStates> {
   StreamSubscription _localSubscription;
-  
-  SettingsBloc() : super(InitialState()) {
+
+  SettingsBloc() : super(ViewState()) {
+    add(GetDatabaseSettingsEvent());
+    print('bloc do settings');
     _localSubscription = DatabaseLocalServer.helper.stream.listen((event) {
       SettingsData data = event;
-      add(ViewEvent(data));
+      add(UpdateSettingsEvent(data: data));
     });
   }
 
   @override
-  Stream<SettingsState> mapEventToState(SettingsEvent event) async* {
-    if (event is ViewEvent) {
-      // Será solicitado info do DB
+  Stream<SettingsStates> mapEventToState(SettingsEvents event) async* {
+    if (event is GetDatabaseSettingsEvent) {
       SettingsData data = await DatabaseLocalServer.helper.getSettingsData();
-      yield ViewState(data);
-    } else if (event is UpdateEvent) {
-      // Será feito o update no DB
-      DatabaseLocalServer.helper.updateNote(event.data);
-      SettingsData data = await DatabaseLocalServer.helper.getSettingsData();
-      yield ViewState(data);
+      yield ViewState(data: data);
+    } else if (event is UpdateSettingsEvent) {
+      yield ViewState(data: event.data);
     }
+  }
+
+  close() {
+    _localSubscription.cancel();
+    return super.close();
   }
 }
