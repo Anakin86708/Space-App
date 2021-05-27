@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:space_app/bloc/database/databaseBloc.dart';
 import 'package:space_app/bloc/database/databaseEvents.dart';
-import 'package:space_app/bloc/database/databaseStates.dart';
 import 'package:space_app/bloc/settings/settingsBloc.dart';
 import 'package:space_app/bloc/settings/settingsStates.dart';
 import 'package:space_app/model/settingsData.dart';
@@ -14,7 +13,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  SettingsData _data = new SettingsData();
   final GlobalKey<FormState> formKey = new GlobalKey();
 
   @override
@@ -23,19 +21,10 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: AppBar(
         title: Text('Ajustes'),
       ),
-      // Tire esse bloc daqui
-      body: BlocListener<SettingsBloc, SettingsStates>(
-          listener: (context, state) {
-            if (state is UpdateViewState) {
-              setState(() {
-                this._data = state.data;
-              });
-            }
-          },
-          child: BlocBuilder<SettingsBloc, SettingsStates>(
-            builder: (BuildContext context, state) =>
-                _generateListSettings(context, state),
-          )),
+      body: BlocBuilder<SettingsBloc, SettingsStates>(
+        builder: (BuildContext context, state) =>
+            _generateListSettings(context, state),
+      ),
     );
   }
 
@@ -47,7 +36,6 @@ class _SettingsPageState extends State<SettingsPage> {
           _eventNotificationItem(context, state),
           _onlyFavoriteItem(context, state),
           _updateFrequencyItem(context, state),
-          // _saveButtonItem(context),
         ],
       ),
     );
@@ -62,7 +50,6 @@ class _SettingsPageState extends State<SettingsPage> {
           state.data.eventNotificationsState = value;
           BlocProvider.of<DatabaseBloc>(context)
               .add(UpdateSettingsEvent(state.data));
-          print(_data);
         },
       ),
     );
@@ -77,8 +64,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ? (bool value) {
                 state.data.onlyFavoriteState = value;
                 BlocProvider.of<DatabaseBloc>(context)
-              .add(UpdateSettingsEvent(state.data));
-                print(_data);
+                    .add(UpdateSettingsEvent(state.data));
               }
             : null,
       ),
@@ -95,7 +81,6 @@ class _SettingsPageState extends State<SettingsPage> {
           state.data.updateFrequencyValue = value;
           BlocProvider.of<DatabaseBloc>(context)
               .add(UpdateSettingsEvent(state.data));
-          print(_data);
         },
         underline: Container(
           color: AppColors.accent,
@@ -109,18 +94,4 @@ class _SettingsPageState extends State<SettingsPage> {
       SettingsData.avaliableUpdatesFrequency
           .map((e) => new DropdownMenuItem(value: e, child: Text(e)))
           .toList();
-
-  Widget _saveButtonItem(BuildContext context) {
-    double padding = 100;
-    return Padding(
-      padding: EdgeInsets.only(right: padding, left: padding),
-      child: ElevatedButton(
-        onPressed: () {
-          BlocProvider.of<DatabaseBloc>(context)
-              .add(UpdateSettingsEvent(_data));
-        },
-        child: Text('Save'),
-      ),
-    );
-  }
 }
