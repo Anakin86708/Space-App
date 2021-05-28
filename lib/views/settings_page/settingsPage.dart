@@ -77,7 +77,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ? (bool value) {
                 state.data.onlyFavoriteState = value;
                 BlocProvider.of<DatabaseBloc>(context)
-              .add(UpdateSettingsEvent(state.data));
+                    .add(UpdateSettingsEvent(state.data));
                 print(_data);
               }
             : null,
@@ -106,7 +106,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   List<DropdownMenuItem<dynamic>> _generateListItens() =>
-      SettingsData.avaliableUpdatesFrequency
+      SettingsData.availableUpdatesFrequency
           .map((e) => new DropdownMenuItem(value: e, child: Text(e)))
           .toList();
 

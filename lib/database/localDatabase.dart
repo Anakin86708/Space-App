@@ -37,12 +37,12 @@ class DatabaseLocalServer {
   _createDb(Database db, int newVersion) async {
     await db.execute(
         "CREATE TABLE $_tableName (id INTEGER PRIMARY KEY, $_colEventNotificationState INT, $_colOnlyFavoriteState INT, $_colUpdateFrequencyState TEXT)");
-    print(SettingsData.avaliableUpdatesFrequency[0]);
+    print(SettingsData.availableUpdatesFrequency[0]);
     await db.insert(_tableName, {
       'id': _id,
       _colEventNotificationState: 0,
       _colOnlyFavoriteState: 0,
-      _colUpdateFrequencyState: SettingsData.avaliableUpdatesFrequency[0],
+      _colUpdateFrequencyState: SettingsData.availableUpdatesFrequency[0],
     });
   }
 
@@ -56,7 +56,6 @@ class DatabaseLocalServer {
     data.onlyFavoriteState =
         settingsMapList[0][_colOnlyFavoriteState] == 1 ? true : false;
     data.updateFrequencyValue = settingsMapList[0][_colUpdateFrequencyState];
-    print("asdf $data");
     return data;
   }
 

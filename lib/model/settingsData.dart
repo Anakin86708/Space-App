@@ -1,6 +1,5 @@
-
 class SettingsData {
-  static const avaliableUpdatesFrequency = [
+  static const availableUpdatesFrequency = [
     '30 min',
     '1h',
     '2h',
@@ -10,7 +9,7 @@ class SettingsData {
   ];
   bool _eventNotificationsState = false;
   bool onlyFavoriteState = false;
-  String updateFrequencyValue = SettingsData.avaliableUpdatesFrequency[0];
+  String updateFrequencyValue = SettingsData.availableUpdatesFrequency[0];
 
   get eventNotificationsState => _eventNotificationsState;
   set eventNotificationsState(value) {
@@ -25,7 +24,7 @@ class SettingsData {
   }
 
   @override
-  String toString() {    
+  String toString() {
     return "Settings model:\n\tNotification state: $eventNotificationsState\n\tOnly favorite state: $onlyFavoriteState\n\tFrequency update: $updateFrequencyValue\n";
   }
 }
