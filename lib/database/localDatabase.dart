@@ -15,7 +15,6 @@ class DatabaseLocalServer {
   String _colEventNotificationState = 'event_notification';
   String _colOnlyFavoriteState = 'only_favorite';
   String _colUpdateFrequencyState = 'update_frequency';
-  int _sizeColUpdate = 20;
   int _id = 1;
 
   Future<Database> get database async {
@@ -59,7 +58,6 @@ class DatabaseLocalServer {
     return data;
   }
 
-  // UPDATE
   Future<int> updateNote(SettingsData data) async {
     Database db = await this.database;
     var result = await db.update(

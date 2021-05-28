@@ -11,7 +11,6 @@ class SettingsBloc extends Bloc<SettingsEvents, SettingsStates> {
 
   SettingsBloc() : super(ViewState()) {
     add(GetDatabaseSettingsEvent());
-    print('bloc do settings');
     _localSubscription = DatabaseLocalServer.helper.stream.listen((event) {
       SettingsData data = event;
       add(UpdateSettingsEvent(data: data));

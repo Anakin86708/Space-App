@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:space_app/routes/appRoutes.dart';
 import 'package:space_app/theme/themeData.dart';
-import 'package:space_app/views/bottomNavigationBarLayout.dart';
 
 import 'bloc/database/databaseBloc.dart';
 import 'bloc/settings/settingsBloc.dart';
@@ -20,7 +20,8 @@ class SpaceApp extends StatelessWidget {
           ],
           child: MaterialApp(
         theme: AppTheme.theme,
-        home: BottomNavegationBarLayout(),
+        routes: AppRoutes.routes,
+        initialRoute: '/',
       ),
     );
   }

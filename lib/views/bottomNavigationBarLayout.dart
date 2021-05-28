@@ -1,30 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:space_app/theme/appColors.dart';
 import 'package:space_app/theme/themeData.dart';
-import 'package:space_app/views/astronauts_page/astronautsPage.dart';
 import 'package:space_app/views/favorite_page/favoritePage.dart';
 import 'package:space_app/views/initial_page/initialPage.dart';
 import 'package:space_app/views/interfacePage.dart';
-import 'package:space_app/views/settings_page/settingsPage.dart';
 
-class BottomNavegationBarLayout extends StatefulWidget {
+class InitialLayout extends StatefulWidget {
   @override
-  _BottomNavegationBarLayoutState createState() =>
-      _BottomNavegationBarLayoutState();
+  _InitialLayoutState createState() => _InitialLayoutState();
 }
 
-class _BottomNavegationBarLayoutState extends State<BottomNavegationBarLayout> {
+class _InitialLayoutState extends State<InitialLayout> {
   int _currentPage = 0;
   List<InterfacePage> _pages = [
     InitialPage(),
     FavoritePage(),
   ];
-  Map<String, Object> _drawerItensNames = {
-    'astronautas': AstronautsPage(),
-    'agências': null,
-    'eventos': null,
-    'ISS': null,
-  };
+  // Nome deve estar de acordo com a rota
+  List<String> _drawerItensNames = [
+    'astronautas',
+    'agências',
+    'eventos',
+    'ISS',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -82,13 +80,12 @@ class _BottomNavegationBarLayoutState extends State<BottomNavegationBarLayout> {
 
   List<Widget> _generateDrawerItemList(BuildContext context) {
     List<Widget> list = [_generateDrawerHeader(context)];
-    _drawerItensNames.forEach((key, item) {
+    _drawerItensNames.forEach((item) {
       list.add(new ListTile(
-        title: Text(key, style: AppTheme.stylerDrawerText),
+        title: Text(item, style: AppTheme.stylerDrawerText),
         onTap: () {
           Navigator.pop(context);
-          Navigator.push(context,
-              MaterialPageRoute(builder: (BuildContext context) => item));
+          Navigator.pushNamed(context, '/' + item);
         },
       ));
     });
@@ -106,11 +103,7 @@ class _BottomNavegationBarLayoutState extends State<BottomNavegationBarLayout> {
             ),
             onPressed: () {
               Navigator.pop(context);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SettingsPage(),
-                  ));
+              Navigator.pushNamed(context, '/settings');
             },
           ),
           alignment: Alignment.topRight,
