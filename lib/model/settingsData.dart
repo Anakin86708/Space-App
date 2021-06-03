@@ -27,4 +27,12 @@ class SettingsData {
   String toString() {
     return "Settings model:\n\tNotification state: $eventNotificationsState\n\tOnly favorite state: $onlyFavoriteState\n\tFrequency update: $updateFrequencyValue\n";
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'eventNotificationsState': _eventNotificationsState,
+      'onlyFavoriteState': onlyFavoriteState,
+      'updateFrequencyValue': updateFrequencyValue,
+    };
+  }
 }

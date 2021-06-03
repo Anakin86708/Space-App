@@ -1,89 +1,54 @@
 import 'dart:async';
-import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:space_app/model/settingsData.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path_provider/path_provider.dart';
 
 class DatabaseLocalServer {
+  /* 
+    Criando singleton
+  */
   static DatabaseLocalServer helper = DatabaseLocalServer._createInstance();
   DatabaseLocalServer._createInstance();
 
-  static Database _database;
+  String databaseUrl = "http://192.168.15.26:5000/data";
 
-  String _tableName = 'Settings';
-  String _colEventNotificationState = 'event_notification';
-  String _colOnlyFavoriteState = 'only_favorite';
-  String _colUpdateFrequencyState = 'update_frequency';
+  Dio _dio = Dio();
+
+  String _colEventNotificationState = 'eventNotificationsState';
+  String _colOnlyFavoriteState = 'onlyFavoriteState';
+  String _colUpdateFrequencyState = 'updateFrequencyValue';
   int _id = 1;
 
-  Future<Database> get database async {
-    if (_database == null) {
-      _database = await initializeDatabase();
-    }
-    return _database;
-  }
-
-  Future<Database> initializeDatabase() async {
-    Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + "settings.db";
-
-    Database notesDatabase =
-        await openDatabase(path, version: 1, onCreate: _createDb);
-    return notesDatabase;
-  }
-
-  _createDb(Database db, int newVersion) async {
-    await db.execute(
-        "CREATE TABLE $_tableName (id INTEGER PRIMARY KEY, $_colEventNotificationState INT, $_colOnlyFavoriteState INT, $_colUpdateFrequencyState TEXT)");
-    print(SettingsData.availableUpdatesFrequency[0]);
-    await db.insert(_tableName, {
-      'id': _id,
-      _colEventNotificationState: 0,
-      _colOnlyFavoriteState: 0,
-      _colUpdateFrequencyState: SettingsData.availableUpdatesFrequency[0],
-    });
-  }
-
   Future<SettingsData> getSettingsData() async {
-    Database db = await this.database;
-    var settingsMapList = await db.rawQuery("SELECT * FROM $_tableName");
+    Response response = await _dio.request(this.databaseUrl,
+        options: Options(method: "GET", headers: {
+          "Accept": "application/json",
+        }));
 
     SettingsData data = new SettingsData();
     data.eventNotificationsState =
-        settingsMapList[0][_colEventNotificationState] == 1 ? true : false;
-    data.onlyFavoriteState =
-        settingsMapList[0][_colOnlyFavoriteState] == 1 ? true : false;
-    data.updateFrequencyValue = settingsMapList[0][_colUpdateFrequencyState];
+        response.data['1'][_colEventNotificationState];
+    data.onlyFavoriteState = response.data['1'][_colOnlyFavoriteState];
+    data.updateFrequencyValue = response.data['1'][_colUpdateFrequencyState];
+
     return data;
   }
 
   Future<int> updateNote(SettingsData data) async {
-    Database db = await this.database;
-    var result = await db.update(
-      _tableName,
-      _convertDataToMap(data),
-      where: "id = ?",
-      whereArgs: [_id],
-    );
+    _dio.put(databaseUrl + '/$_id',
+        data: data.toMap(),
+        options: Options(method: "PUT", headers: {
+          "Accept": "application/json",
+        }));
     print('Atualizado DB');
     notify();
-    return result;
-  }
-
-  Map<String, Object> _convertDataToMap(SettingsData data) {
-    Map<String, Object> convertedMap = {};
-    convertedMap[_colEventNotificationState] =
-        data.eventNotificationsState ? 1 : 0;
-    convertedMap[_colOnlyFavoriteState] = data.onlyFavoriteState ? 1 : 0;
-    convertedMap[_colUpdateFrequencyState] = data.updateFrequencyValue;
-
-    return convertedMap;
+    return 1;
   }
 
   notify() async {
     if (_controller != null) {
       var response = await getSettingsData();
+      print(response);
       _controller.sink.add(response);
     }
   }
