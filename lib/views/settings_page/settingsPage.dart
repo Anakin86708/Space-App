@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:space_app/bloc/database/databaseBloc.dart';
 import 'package:space_app/bloc/database/databaseEvents.dart';
 import 'package:space_app/bloc/settings/settingsBloc.dart';
+import 'package:space_app/bloc/settings/settingsEvents.dart';
 import 'package:space_app/bloc/settings/settingsStates.dart';
 import 'package:space_app/model/settingsData.dart';
 import 'package:space_app/theme/appColors.dart';
@@ -36,6 +37,7 @@ class _SettingsPageState extends State<SettingsPage> {
           _eventNotificationItem(context, state),
           _onlyFavoriteItem(context, state),
           _updateFrequencyItem(context, state),
+          ElevatedButton.icon(onPressed: () {BlocProvider.of<SettingsBloc>(context).add(GetDatabaseSettingsEvent());}, icon: Icon(Icons.sync), label: Text('Sync')),
         ],
       ),
     );
@@ -49,7 +51,7 @@ class _SettingsPageState extends State<SettingsPage> {
         onChanged: (bool value) {
           state.data.eventNotificationsState = value;
           BlocProvider.of<DatabaseBloc>(context)
-              .add(UpdateSettingsEvent(state.data));
+              .add(UpdateDatabaseSettingsEvent(state.data));
         },
       ),
     );
@@ -64,7 +66,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ? (bool value) {
                 state.data.onlyFavoriteState = value;
                 BlocProvider.of<DatabaseBloc>(context)
-                    .add(UpdateSettingsEvent(state.data));
+                    .add(UpdateDatabaseSettingsEvent(state.data));
               }
             : null,
       ),
@@ -80,7 +82,7 @@ class _SettingsPageState extends State<SettingsPage> {
         onChanged: (value) {
           state.data.updateFrequencyValue = value;
           BlocProvider.of<DatabaseBloc>(context)
-              .add(UpdateSettingsEvent(state.data));
+              .add(UpdateDatabaseSettingsEvent(state.data));
         },
         underline: Container(
           color: AppColors.accent,
