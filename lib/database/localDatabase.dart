@@ -10,7 +10,7 @@ class DatabaseLocalServer {
   static DatabaseLocalServer helper = DatabaseLocalServer._createInstance();
   DatabaseLocalServer._createInstance();
 
-  String databaseUrl = "http://192.168.15.26:5000/data";
+  String databaseUrl = "https://fake-bd.herokuapp.com/data";
 
   Dio _dio = Dio();
 
