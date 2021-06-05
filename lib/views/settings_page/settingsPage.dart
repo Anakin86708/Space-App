@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:space_app/bloc/database/databaseBloc.dart';
+import 'package:space_app/bloc/database/databaseEvents.dart';
+import 'package:space_app/bloc/settings/settingsBloc.dart';
+import 'package:space_app/bloc/settings/settingsStates.dart';
 import 'package:space_app/model/settingsData.dart';
 import 'package:space_app/theme/appColors.dart';
 
@@ -8,74 +13,74 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  static SettingsData data = new SettingsData();
+  final GlobalKey<FormState> formKey = new GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Ajustes'),
       ),
-      body: _generateListSettings(),
+      body: BlocBuilder<SettingsBloc, SettingsStates>(
+        builder: (BuildContext context, state) =>
+            _generateListSettings(context, state),
+      ),
     );
   }
 
-  Widget _generateListSettings() {
-    return ListView(
-      children: [
-        _eventNotificationItem(),
-        _onlyFavoriteItem(),
-        _updateFrequencyItem(),
-      ],
+  Widget _generateListSettings(BuildContext context, state) {
+    return Form(
+      key: formKey,
+      child: ListView(
+        children: [
+          _eventNotificationItem(context, state),
+          _onlyFavoriteItem(context, state),
+          _updateFrequencyItem(context, state),
+        ],
+      ),
     );
   }
 
-  ListTile _eventNotificationItem() {
-    return _generateSettingsItem();
-  }
-
-  ListTile _generateSettingsItem() {
+  ListTile _eventNotificationItem(BuildContext context, state) {
     return ListTile(
       title: Text('Notificação de eventos'),
       trailing: Switch(
-        value: data.eventNotificationsState,
+        value: state.data.eventNotificationsState,
         onChanged: (bool value) {
-          setState(() {
-            data.eventNotificationsState = value;
-          });
-          print(data);
+          state.data.eventNotificationsState = value;
+          BlocProvider.of<DatabaseBloc>(context)
+              .add(UpdateSettingsEvent(state.data));
         },
       ),
     );
   }
 
-  ListTile _onlyFavoriteItem() {
+  ListTile _onlyFavoriteItem(BuildContext context, state) {
     return ListTile(
       title: Text('Apenas eventos favoritos'),
       trailing: Switch(
-        value: data.onlyFavoriteState,
-        onChanged: data.eventNotificationsState
+        value: state.data.onlyFavoriteState,
+        onChanged: state.data.eventNotificationsState
             ? (bool value) {
-                setState(() {
-                  data.onlyFavoriteState = value;
-                });
-                print(data);
+                state.data.onlyFavoriteState = value;
+                BlocProvider.of<DatabaseBloc>(context)
+                    .add(UpdateSettingsEvent(state.data));
               }
             : null,
       ),
     );
   }
 
-  ListTile _updateFrequencyItem() {
+  ListTile _updateFrequencyItem(BuildContext context, state) {
     return ListTile(
       title: Text('Frequência de atualização'),
       trailing: DropdownButton<String>(
-        value: data.updateFrequencyValue,
+        value: state.data.updateFrequencyValue,
         items: _generateListItens(),
         onChanged: (value) {
-          setState(() {
-            data.updateFrequencyValue = value;
-          });
-          print(data);
+          state.data.updateFrequencyValue = value;
+          BlocProvider.of<DatabaseBloc>(context)
+              .add(UpdateSettingsEvent(state.data));
         },
         underline: Container(
           color: AppColors.accent,
@@ -86,7 +91,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   List<DropdownMenuItem<dynamic>> _generateListItens() =>
-      SettingsData.avaliableUpdatesFrequency
+      SettingsData.availableUpdatesFrequency
           .map((e) => new DropdownMenuItem(value: e, child: Text(e)))
           .toList();
 }
