@@ -5,6 +5,7 @@ import 'package:space_app/views/favorite_page/favoritePage.dart';
 import 'package:space_app/views/initial_page/initialPage.dart';
 import 'package:space_app/views/interfacePage.dart';
 import 'package:space_app/views/profile_page/profilePage.dart';
+import 'package:space_app/views/profile_page/wrapperProfile.dart';
 
 class InitialLayout extends StatefulWidget {
   @override
@@ -16,7 +17,7 @@ class _InitialLayoutState extends State<InitialLayout> {
   List<InterfacePage> _pages = [
     InitialPage(),
     FavoritePage(),
-    ProfilePage(),
+    WrapperProfile(),
   ];
   // Nome deve estar de acordo com a rota
   List<String> _drawerItensNames = [

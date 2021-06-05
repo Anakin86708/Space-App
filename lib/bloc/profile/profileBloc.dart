@@ -4,7 +4,7 @@ import 'package:space_app/bloc/profile/profileStates.dart';
 import 'package:space_app/model/userData.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  ProfileBloc(ProfileState initialState) : super(initialState);
+  ProfileBloc() : super(UnloggedState());
 
   @override
   Stream<ProfileState> mapEventToState(ProfileEvent event) async* {
