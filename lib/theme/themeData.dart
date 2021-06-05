@@ -26,6 +26,10 @@ class AppTheme {
         backgroundColor: AppColors.primary.shade600,
         iconTheme: IconThemeData(color: AppColors.secondary),
       ),
+      inputDecorationTheme: InputDecorationTheme(
+          fillColor: AppColors.secondary,
+          filled: true,
+          labelStyle: TextStyle(color: AppColors.primary[900])),
     );
   }
 

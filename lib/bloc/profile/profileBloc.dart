@@ -4,7 +4,10 @@ import 'package:space_app/bloc/profile/profileStates.dart';
 import 'package:space_app/model/userData.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  ProfileBloc() : super(UnloggedState());
+  ProfileBloc() : super(UnloggedState()) {
+    // Verificar no servidor se está logado
+    add(RegisterEvent());
+  }
 
   @override
   Stream<ProfileState> mapEventToState(ProfileEvent event) async* {
@@ -16,6 +19,16 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       yield LogState();
     } else if (event is LoginSucess) {
       // yield LoggedState();
+    } else if (event is SendDataEvent) {
+      if (state is RegisterState) {
+        // Verificar o register
+        // Se correto, yield Logged
+        // Senão yield error
+      } else if (state is LogState) {
+        // Verificar o login
+        // Se correto, yield Logged
+        // Senão yield error
+      }
     } else if (event is ErrorEvent) {
       yield ErrorState(event.message);
     }
