@@ -1,11 +1,21 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
+import 'package:space_app/auth/authProvider.dart';
 import 'package:space_app/bloc/profile/profileEvents.dart';
 import 'package:space_app/bloc/profile/profileStates.dart';
 import 'package:space_app/model/userData.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
+  AuthProvider _authenticationService;
+  StreamSubscription _authenticationStream;
+
   ProfileBloc() : super(UnloggedState()) {
     // Verificar no servidor se está logado
+    _authenticationService = AuthProvider();
+    _authenticationStream = _authenticationService.user.listen((event) {
+      add(ServerEvent(event));
+    });
     add(RegisterEvent());
   }
 
@@ -21,7 +31,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       // yield LoggedState();
     } else if (event is SendDataEvent) {
       if (state is RegisterState) {
-        // Verificar o register
+        await _authenticationService.createUserWithEmailAndPassword(
+            email: event.email,
+            password: event.password); // Verificar o register
         // Se correto, yield Logged
         // Senão yield error
       } else if (state is LogState) {

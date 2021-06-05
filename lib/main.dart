@@ -3,11 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:space_app/bloc/profile/profileBloc.dart';
 import 'package:space_app/routes/appRoutes.dart';
 import 'package:space_app/theme/themeData.dart';
-
+import 'package:firebase_core/firebase_core.dart';
 import 'bloc/database/databaseBloc.dart';
 import 'bloc/settings/settingsBloc.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(SpaceApp());
 }
 

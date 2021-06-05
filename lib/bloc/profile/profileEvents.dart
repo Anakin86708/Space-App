@@ -1,3 +1,5 @@
+import 'package:space_app/model/userData.dart';
+
 abstract class ProfileEvent {}
 
 class RegisterEvent extends ProfileEvent {}
@@ -19,3 +21,9 @@ class ErrorEvent extends ProfileEvent {
 }
 
 class LoginSucess extends ProfileEvent {}
+
+class ServerEvent extends ProfileEvent {
+  final UserData data;
+
+  ServerEvent(this.data);
+}
