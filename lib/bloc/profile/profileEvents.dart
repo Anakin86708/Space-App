@@ -1,15 +1,15 @@
-abstract class ProfileEvents {}
+abstract class ProfileEvent {}
 
 class RegisterEvent {}
 
-class ChangeToRegisterEvent extends ProfileEvents {}
+class ChangeToRegisterEvent extends ProfileEvent {}
 
-class ChangeToLoginEvent extends ProfileEvents {}
+class ChangeToLoginEvent extends ProfileEvent {}
 
-class ErrorEvent extends ProfileEvents {
+class ErrorEvent extends ProfileEvent {
   final String message;
 
   ErrorEvent(this.message);
 }
 
-class LoginSucess extends ProfileEvents {}
+class LoginSucess extends ProfileEvent {}
