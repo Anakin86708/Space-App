@@ -31,9 +31,15 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       // yield LoggedState();
     } else if (event is SendDataEvent) {
       if (state is RegisterState) {
-        await _authenticationService.createUserWithEmailAndPassword(
-            email: event.email,
-            password: event.password); // Verificar o register
+        try {
+          UserData user =
+              await _authenticationService.createUserWithEmailAndPassword(
+                  email: event.email,
+                  password: event.password);
+          yield LoggedState(user);
+        } catch (e) {
+          yield ErrorState(e.toString());
+        }
         // Se correto, yield Logged
         // Senão yield error
       } else if (state is LogState) {

@@ -65,6 +65,7 @@ class WrapperProfile extends StatelessWidget implements InterfacePage {
         onSaved: (String userValue) {
           data.password = userValue;
         },
+        validator: (value) => value.length >= 6 ? null : 'Senha deve ter ao menos 6 caracteres',
       ),
     );
   }
@@ -72,9 +73,11 @@ class WrapperProfile extends StatelessWidget implements InterfacePage {
   Widget _generateLoginButton(BuildContext context) {
     return ElevatedButton(
         onPressed: () {
-          formKey.currentState.save();
-          print('Pressed');
-          BlocProvider.of<ProfileBloc>(context).add(data);
+          if (formKey.currentState.validate()){
+            formKey.currentState.save();
+            print('Pressed');
+            BlocProvider.of<ProfileBloc>(context).add(data);
+          }
         },
         child: Text("Log in!"));
   }
