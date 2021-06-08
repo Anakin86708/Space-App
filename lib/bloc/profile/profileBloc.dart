@@ -25,8 +25,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       yield RegisterState();
     } else if (event is ChangeToLoginEvent) {
       yield LogState();
-    } else if (event is LoginSucess) {
-      // yield LoggedState();
     } else if (event is SendDataEvent) {
       if (state is RegisterState) {
         try {
@@ -53,6 +51,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     } else if (event is Logout) {
       await _authenticationService.signOut();
       yield UnloggedState();
+    } else if (event is ServerEvent) {
+      if (event.data == null) {
+        yield UnloggedState();
+      } else {
+        yield LoggedState(event.data);
+      }
     } else if (event is ErrorEvent) {
       yield ErrorState(event.message);
     }

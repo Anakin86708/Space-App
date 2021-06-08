@@ -20,8 +20,6 @@ class ErrorEvent extends ProfileEvent {
   ErrorEvent(this.message);
 }
 
-class LoginSucess extends ProfileEvent {}
-
 class Logout extends ProfileEvent {}
 
 class ServerEvent extends ProfileEvent {
