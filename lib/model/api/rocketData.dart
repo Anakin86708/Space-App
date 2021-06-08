@@ -1,4 +1,6 @@
 class RocketData {
+  static const eventTable = 'rocket';
+
   final int serverID;
   final String url;
   final String name;
@@ -10,7 +12,6 @@ class RocketData {
       this.variant);
 
   static String sqlCreateQuery() {
-    const eventTable = 'rocket';
     return 'CREATE TABLE $eventTable ('
         'serverID INTEGER PRIMARY KEY,'
         'url TEXT,'

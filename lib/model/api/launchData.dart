@@ -2,6 +2,8 @@ import 'package:space_app/model/api/missionData.dart';
 import 'package:space_app/model/api/rocketData.dart';
 
 class LaunchData {
+  static const eventTable = 'launch';
+  
   final int serverLaunchID;
   final String url;
   final String name;
@@ -38,7 +40,6 @@ class LaunchData {
       this.imageUrl);
 
   static String sqlCreateQuery() {
-    const eventTable = 'launch';
     return 'CREATE TABLE $eventTable ('
         'serverLaunchID INTEGER PRIMARY KEY,'
         'url TEXT,'

@@ -1,4 +1,6 @@
 class MissionData {
+  static const eventTable = 'mission';
+  
   final int serverID;
   final String name;
   final String description;
@@ -10,7 +12,6 @@ class MissionData {
       this.type, this.orbitName);
 
   static String sqlCreateQuery() {
-    const eventTable = 'mission';
     return 'CREATE TABLE $eventTable ('
         'serverID INTEGER PRIMARY KEY,'
         'name TEXT,'

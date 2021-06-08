@@ -1,4 +1,6 @@
 class SpacestationData {
+  static const eventTable = 'spacestation';
+
   final int serverID;
   final String url;
   final String name;
@@ -12,7 +14,6 @@ class SpacestationData {
       this.founded, this.description, this.orbit, this.imageUrl);
 
   static String sqlCreateQuery() {
-    const eventTable = 'spacestation';
     return 'CREATE TABLE $eventTable ('
         'serverID INTEGER PRIMARY KEY,'
         'url TEXT,'

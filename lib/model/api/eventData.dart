@@ -1,4 +1,6 @@
 class EventData {
+  static const eventTable = 'event';
+
   final int serverID;
   final String url;
   final String eventName;
@@ -9,9 +11,9 @@ class EventData {
   final String videoUrl;
   final String imageUrl;
   final String date;
-  final int launchID;
-  final int spacestationID;
-  final int programID;
+  final String launchID;
+  final String spacestationID;
+  final String programID;
 
   EventData(this.serverID,
       {this.url,
@@ -27,8 +29,24 @@ class EventData {
       this.spacestationID,
       this.programID});
 
+  factory EventData.fromMapAPI(Map<String, dynamic> map) {
+    return EventData(map['id'],
+        url: map['url'],
+        eventName: map['name'],
+        typeName: map['type']['name'],
+        description: map['description'],
+        location: map['location'],
+        newsUrl: map['news_url'],
+        videoUrl: map['video_url'],
+        imageUrl: map['feature_image'],
+        date: map['date'],
+        launchID: map['launches'].length > 0 ? map['launches'][0]['id'].toString() : null,
+        spacestationID:
+            map['spacestations'].length > 0 ? map['spacestations'][0]['id'].toString() : null,
+        programID: map['program'].length > 0 ? map['program'][0]['id'].toString() : null);
+  }
+
   static String sqlCreateQuery() {
-    const eventTable = 'event';
     return 'CREATE TABLE $eventTable ('
         'serverID INTEGER PRIMARY KEY,'
         'url TEXT,'
@@ -40,9 +58,9 @@ class EventData {
         'videoUrl TEXT,'
         'imageUrl TEXT,'
         'date TEXT,'
-        'launchID INTEGER,'
-        'spacestation INTEGER,'
-        'programID INTEGER,'
+        'launchID TEXT,'
+        'spacestation TEXT,'
+        'programID TEXT,'
         ')';
   }
 }

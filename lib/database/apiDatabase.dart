@@ -33,4 +33,9 @@ class APIDatabase {
     await db.execute(RocketData.sqlCreateQuery());
     await db.execute(SpacestationData.sqlCreateQuery());
   }
+
+  Future<List<EventData>> getAllEvents() async {
+    Database db = await this.database;
+    var result = db.rawQuery('SELECT * FROM ${EventData.eventTable}');
+  }
 }
