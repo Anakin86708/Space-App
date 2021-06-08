@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:space_app/bloc/profile/profileBloc.dart';
 import 'package:space_app/bloc/profile/profileEvents.dart';
 import 'package:space_app/bloc/profile/profileStates.dart';
+import 'package:space_app/theme/appColors.dart';
 import 'package:space_app/views/interfacePage.dart';
+import 'package:space_app/views/profile_page/profilePage.dart';
 
 class WrapperProfile extends StatelessWidget implements InterfacePage {
   final GlobalKey<FormState> formKey = new GlobalKey();
@@ -18,11 +20,33 @@ class WrapperProfile extends StatelessWidget implements InterfacePage {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ProfileBloc, ProfileState>(
-        builder: (context, state) {
-          BlocProvider.of<ProfileBloc>(context).add(RegisterEvent());
-          return _buildFormInterface(context, state);
-        },
-        listener: (context, state) {});
+      builder: (context, state) {
+        print(state);
+        if (state is LoggedState) {
+          return ProfilePage(state.user);
+        }
+        return _buildFormInterface(context, state);
+      },
+      listener: (context, state) {
+        if (state is ErrorState) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text("Erro do Servidor"),
+                  content: Text("${state.message}"),
+                  actions: [
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("Ok"))
+                  ],
+                );
+              });
+        }
+      },
+    );
   }
 
   Widget _buildFormInterface(BuildContext context, ProfileState state) {
@@ -35,7 +59,10 @@ class WrapperProfile extends StatelessWidget implements InterfacePage {
           children: [
             _emailFormField(state),
             _passwordFormField(state),
-            _generateLoginButton(context),
+            _generateFormButton(context, state),
+            Divider(thickness: 2),
+            _generateChangeText(context, state),
+            _generateChangeButton(context, state),
           ],
         ),
       ),
@@ -65,20 +92,42 @@ class WrapperProfile extends StatelessWidget implements InterfacePage {
         onSaved: (String userValue) {
           data.password = userValue;
         },
-        validator: (value) => value.length >= 6 ? null : 'Senha deve ter ao menos 6 caracteres',
+        validator: (value) =>
+            value.length >= 6 ? null : 'Senha deve ter ao menos 6 caracteres',
       ),
     );
   }
 
-  Widget _generateLoginButton(BuildContext context) {
+  Widget _generateFormButton(BuildContext context, ProfileState state) {
     return ElevatedButton(
-        onPressed: () {
-          if (formKey.currentState.validate()){
-            formKey.currentState.save();
-            print('Pressed');
-            BlocProvider.of<ProfileBloc>(context).add(data);
-          }
-        },
-        child: Text("Log in!"));
+      onPressed: () {
+        if (formKey.currentState.validate()) {
+          formKey.currentState.save();
+          print('Pressed');
+          BlocProvider.of<ProfileBloc>(context).add(data);
+        }
+      },
+      child: state is LogState ? Text("Login") : Text("Registrar"),
+    );
+  }
+
+  Widget _generateChangeText(BuildContext context, ProfileState state) {
+    TextStyle style = TextStyle(color: AppColors.secondary);
+    return state is LogState
+        ? Text('Ainda não tem uma conta?', style: style)
+        : Text('Já possui uma conta?', style: style);
+  }
+
+  Widget _generateChangeButton(BuildContext context, ProfileState state) {
+    return ElevatedButton(
+      onPressed: () {
+        ProfileEvent event =
+            state is LogState ? ChangeToRegisterEvent() : ChangeToLoginEvent();
+        print('Changing state to $event');
+        print('Current state $state');
+        BlocProvider.of<ProfileBloc>(context).add(event);
+      },
+      child: state is LogState ? Text("Criar uma") : Text("Realizar login"),
+    );
   }
 }

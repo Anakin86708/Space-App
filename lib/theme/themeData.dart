@@ -30,6 +30,7 @@ class AppTheme {
           fillColor: AppColors.secondary,
           filled: true,
           labelStyle: TextStyle(color: AppColors.primary[900])),
+      dividerColor: AppColors.accent,
     );
   }
 

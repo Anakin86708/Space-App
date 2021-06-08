@@ -22,6 +22,8 @@ class ErrorEvent extends ProfileEvent {
 
 class LoginSucess extends ProfileEvent {}
 
+class Logout extends ProfileEvent {}
+
 class ServerEvent extends ProfileEvent {
   final UserData data;
 

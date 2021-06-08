@@ -16,14 +16,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     _authenticationStream = _authenticationService.user.listen((event) {
       add(ServerEvent(event));
     });
-    add(RegisterEvent());
+    add(ChangeToRegisterEvent());
   }
 
   @override
   Stream<ProfileState> mapEventToState(ProfileEvent event) async* {
-    if (event is RegisterEvent) {
-      yield RegisterState();
-    } else if (event is ChangeToRegisterEvent) {
+    if (event is ChangeToRegisterEvent) {
       yield RegisterState();
     } else if (event is ChangeToLoginEvent) {
       yield LogState();
@@ -34,19 +32,27 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         try {
           UserData user =
               await _authenticationService.createUserWithEmailAndPassword(
-                  email: event.email,
-                  password: event.password);
+                  email: event.email, password: event.password);
           yield LoggedState(user);
         } catch (e) {
           yield ErrorState(e.toString());
         }
-        // Se correto, yield Logged
-        // Senão yield error
       } else if (state is LogState) {
+        try {
+          UserData user =
+              await _authenticationService.signInWithEmailAndPassword(
+                  email: event.email, password: event.password);
+          yield LoggedState(user);
+        } catch (e) {
+          yield ErrorState(e.toString());
+        }
         // Verificar o login
         // Se correto, yield Logged
         // Senão yield error
       }
+    } else if (event is Logout) {
+      await _authenticationService.signOut();
+      yield UnloggedState();
     } else if (event is ErrorEvent) {
       yield ErrorState(event.message);
     }
