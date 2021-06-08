@@ -19,7 +19,43 @@ class LaunchData {
   final String liveUrl;
   final String imageUrl;
 
-  LaunchData(this.serverLaunchID, this.url, this.name, this.launchStatus, this.windowStart, this.windowEnd, this.probability, this.holdReason, this.failReason, this.launchProvider, this.rocket, this.mission, this.infoUrl, this.videoUrl, this.liveUrl, this.imageUrl);
-  
-}
+  LaunchData(
+      this.serverLaunchID,
+      this.url,
+      this.name,
+      this.launchStatus,
+      this.windowStart,
+      this.windowEnd,
+      this.probability,
+      this.holdReason,
+      this.failReason,
+      this.launchProvider,
+      this.rocket,
+      this.mission,
+      this.infoUrl,
+      this.videoUrl,
+      this.liveUrl,
+      this.imageUrl);
 
+  static String sqlCreateQuery() {
+    const eventTable = 'launch';
+    return 'CREATE TABLE $eventTable ('
+        'serverLaunchID INTEGER PRIMARY KEY,'
+        'url TEXT,'
+        'name TEXT,'
+        'launchStatus TEXT,'
+        'windowStart TEXT,'
+        'windowEnd TEXT,'
+        'probability REAL,'
+        'holdReason TEXT,'
+        'failReason TEXT,'
+        'launchProvider TEXT,'
+        'rocket INTEGER,'
+        'mission INTEGER,'
+        'infoUrl TEXT,'
+        'videoUrl TEXT,'
+        'liveUrl TEXT,'
+        'imageUrl TEXT,'
+        ')';
+  }
+}

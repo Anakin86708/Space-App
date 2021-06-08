@@ -26,4 +26,23 @@ class EventData {
       this.launchID,
       this.spacestationID,
       this.programID});
+
+  static String sqlCreateQuery() {
+    const eventTable = 'event';
+    return 'CREATE TABLE $eventTable ('
+        'serverID INTEGER PRIMARY KEY,'
+        'url TEXT,'
+        'eventName TEXT,'
+        'typeName TEXT,'
+        'descripti TEXT,'
+        'location TEXT,'
+        'newsUrl TEXT,'
+        'videoUrl TEXT,'
+        'imageUrl TEXT,'
+        'date TEXT,'
+        'launchID INTEGER,'
+        'spacestation INTEGER,'
+        'programID INTEGER,'
+        ')';
+  }
 }
