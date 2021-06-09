@@ -3,6 +3,7 @@ import 'package:space_app/model/postData.dart';
 import 'package:space_app/theme/appColors.dart';
 import 'package:space_app/theme/themeData.dart';
 import 'package:space_app/views/interfacePage.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PostPage extends StatefulWidget implements InterfacePage {
   Icon _pageIcon = Icon(Icons.stroller);
@@ -131,19 +132,28 @@ class PostPageState extends State<PostPage> {
   }
 
   Column bottomNavigationMenu() {
+    var validNamesForMenu = widget.data.data.getMenuItemIconList();
+    List<Widget> itensMenu = [];
+    validNamesForMenu.forEach((key, item) {
+      itensMenu.add(ListTile(
+        title: Text(item['name']),
+        leading: item['icon'],
+        onTap: () {
+          Navigator.pop(context);
+          _launchURL(item['value']);
+        },
+      ));
+    });
     return Column(
-      children: [
-        ListTile(
-          title: Text("Opção 01"),
-          leading: Icon(Icons.ac_unit),
-          onTap: () => Navigator.pop(context),
-        ),
-        ListTile(
-          title: Text("Opção 02"),
-          leading: Icon(Icons.ac_unit),
-          onTap: () => Navigator.pop(context),
-        )
-      ],
+      children: itensMenu,
     );
+  }
+
+  _launchURL(url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

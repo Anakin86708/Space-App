@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class EventData {
   static const eventTable = 'event';
 
@@ -40,10 +42,22 @@ class EventData {
         videoUrl: map['video_url'],
         imageUrl: map['feature_image'],
         date: map['date'],
-        launchID: map['launches'].length > 0 ? map['launches'][0]['id'].toString() : null,
-        spacestationID:
-            map['spacestations'].length > 0 ? map['spacestations'][0]['id'].toString() : null,
-        programID: map['program'].length > 0 ? map['program'][0]['id'].toString() : null);
+        launchID: map['launches'].length > 0
+            ? map['launches'][0]['id'].toString()
+            : null,
+        spacestationID: map['spacestations'].length > 0
+            ? map['spacestations'][0]['id'].toString()
+            : null,
+        programID: map['program'].length > 0
+            ? map['program'][0]['id'].toString()
+            : null);
+  }
+
+  Map<String, Map<String, dynamic>> getMenuItemIconList() {
+    return {
+      'newsUrl': {'name':'Notícias', 'icon': Icon(Icons.link), 'value': newsUrl},
+      'videoUrl': {'name':'Vídeo', 'icon': Icon(Icons.play_circle), 'value': videoUrl},
+    };
   }
 
   static String sqlCreateQuery() {
