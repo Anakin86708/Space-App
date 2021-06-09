@@ -25,7 +25,7 @@ class _FavoritePageState extends State<FavoritePage> {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(padding, 0, padding, 0),
         child: ListView.builder(
-          itemBuilder: (context, index) => new PostCard(isFavorited: true,),
+          itemBuilder: (context, index) => new PostCard(),
         ),
       ),
     );

@@ -7,13 +7,7 @@ class PostCard extends StatefulWidget {
   static const cardPadding = const EdgeInsets.all(16.0);
   PostData data;
 
-  PostCard(
-      {String title = 'Title',
-      String content = 'Content',
-      String imageUrl = '',
-      bool isFavorited = false}) {
-    data = PostData(title, content, imageUrl, isFavorited: isFavorited);
-  }
+  PostCard({this.data});
 
   @override
   _PostCardState createState() => _PostCardState();
