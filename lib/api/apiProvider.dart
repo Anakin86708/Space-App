@@ -6,7 +6,7 @@ class APIProvider {
   APIProvider._createInstance();
   Dio _dio = Dio();
 
-  static const String _apiURL = 'https://ll.thespacedevs.com/2.0.0/';
+  static const String _apiURL = 'https://lldev.thespacedevs.com/2.2.0/'; // DEVELOPER API
   static const String _eventsEndpoint = 'event/';
 
   Future<List<EventData>> getAllEvents() async {
@@ -17,7 +17,7 @@ class APIProvider {
     // do {
     try {
       response = await _dio.request(
-        requestUrl + '?limit=300',
+        requestUrl + '?limit=100',
         options: Options(
           method: 'GET',
           headers: {"Accept": "application/json"},
