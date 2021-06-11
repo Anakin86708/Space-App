@@ -9,21 +9,26 @@ import 'package:space_app/model/api/spacestationData.dart';
 import 'package:sqflite/sqflite.dart';
 
 class APIDatabase {
-  static const String FILENAME = 'api_data.db';
+  static const String FILENAME = '/api_data.db';
 
   static Database _database;
   static APIDatabase helper = APIDatabase._createInstance();
   APIDatabase._createInstance();
 
   Future<Database> get database async {
-    return _database ?? await _initializeDatabase();
+    if (_database == null) {
+      _database = await _initializeDatabase();
+    }
+    return _database;
+    // return _database ?? await _initializeDatabase();
   }
 
   Future<Database> _initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = directory.path + FILENAME;
-
-    return await openDatabase(path, version: 1, onCreate: _createDB);
+    print('Initialized database');
+    Database db = await openDatabase(path, version: 1, onCreate: _createDB);
+    return db;
   }
 
   _createDB(Database db, int newVersion) async {
@@ -36,6 +41,12 @@ class APIDatabase {
 
   Future<List<EventData>> getAllEvents() async {
     Database db = await this.database;
-    var result = db.rawQuery('SELECT * FROM ${EventData.eventTable}');
+    List<Map<String, Object>> result =
+        await db.rawQuery('SELECT * FROM ${EventData.eventTable}');
+  }
+
+  Future<int> insertEvent(EventData data) async {
+    Database db = await this.database;
+    return await db.insert(EventData.eventTable, data.asMap());
   }
 }

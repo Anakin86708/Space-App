@@ -18,7 +18,7 @@ class MissionData {
         'description TEXT,'
         'launchDesignator TEXT,'
         'type TEXT,'
-        'orbitName TEXT,'
+        'orbitName TEXT'
         ')';
   }
 }

@@ -22,7 +22,7 @@ class SpacestationData {
         'founded TEXT,'
         'description TEXT,'
         'orbit TEXT,'
-        'imageUrl TEXT,'
+        'imageUrl TEXT'
         ')';
   }
 }

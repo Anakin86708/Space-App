@@ -18,7 +18,7 @@ class RocketData {
         'name TEXT,'
         'family TEXT,'
         'fullName TEXT,'
-        'variant TEXT,'
+        'variant TEXT'
         ')';
   }
 }

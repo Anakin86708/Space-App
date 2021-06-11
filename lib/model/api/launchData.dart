@@ -56,7 +56,7 @@ class LaunchData {
         'infoUrl TEXT,'
         'videoUrl TEXT,'
         'liveUrl TEXT,'
-        'imageUrl TEXT,'
+        'imageUrl TEXT'
         ')';
   }
 }

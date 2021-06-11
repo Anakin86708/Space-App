@@ -53,10 +53,36 @@ class EventData {
             : null);
   }
 
+  Map<String, dynamic> asMap() {
+    return {
+      'serverID': serverID,
+      'url': url,
+      'eventName': eventName,
+      'typeName': typeName,
+      'description': description,
+      'location': location,
+      'newsUrl': newsUrl,
+      'videoUrl': videoUrl,
+      'imageUrl': imageUrl,
+      'date': date,
+      'launchID': launchID,
+      'spacestationID': spacestationID,
+      'programID': programID,
+    };
+  }
+
   Map<String, Map<String, dynamic>> getMenuItemIconList() {
     return {
-      'newsUrl': {'name':'Notícias', 'icon': Icon(Icons.link), 'value': newsUrl},
-      'videoUrl': {'name':'Vídeo', 'icon': Icon(Icons.play_circle), 'value': videoUrl},
+      'newsUrl': {
+        'name': 'Notícias',
+        'icon': Icon(Icons.link),
+        'value': newsUrl
+      },
+      'videoUrl': {
+        'name': 'Vídeo',
+        'icon': Icon(Icons.play_circle),
+        'value': videoUrl
+      },
     };
   }
 
@@ -66,15 +92,15 @@ class EventData {
         'url TEXT,'
         'eventName TEXT,'
         'typeName TEXT,'
-        'descripti TEXT,'
+        'description TEXT,'
         'location TEXT,'
         'newsUrl TEXT,'
         'videoUrl TEXT,'
         'imageUrl TEXT,'
         'date TEXT,'
         'launchID TEXT,'
-        'spacestation TEXT,'
-        'programID TEXT,'
+        'spacestationID TEXT,'
+        'programID TEXT'
         ')';
   }
 }
