@@ -24,14 +24,14 @@ class InitialPage extends StatefulWidget implements InterfacePage {
 class _InitialPageState extends State<InitialPage> {
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<InitialBloc>(context).add(RequestListData());
     return BlocBuilder<InitialBloc, InitialStates>(
         builder: (context, state)  => _build(context, state));
   }
 }
 
 _build(BuildContext context, state) {
-  const padding = 16.0;
-  BlocProvider.of<InitialBloc>(context).add(RequestListData());
+  const padding = 16.0;  
   return Container(
     child: Padding(
       padding: const EdgeInsets.fromLTRB(padding, 0, padding, 0),

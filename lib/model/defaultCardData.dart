@@ -9,11 +9,14 @@ abstract class DefaultCardData {
   DefaultCardData(this.title, this.content, this.imageUrl,
       {this.isFavorited = false});
 
-  Image buildImage() {
-    return Image.network(
-      imageUrl,
-      errorBuilder: (context, error, stackTrace) =>
-          Image.asset('assets/images/404.png'),
-    );
+  buildImage() {
+    try {
+      return FadeInImage(
+        placeholder: AssetImage('assets/images/loading.gif'),
+        image: NetworkImage(imageUrl),
+      );
+    } on Exception catch (e) {
+      return Image.asset('assets/images/404.png'); 
+    }
   }
 }
