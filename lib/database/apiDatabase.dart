@@ -1,11 +1,8 @@
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
+import 'package:space_app/model/api/astronautData.dart';
 import 'package:space_app/model/api/eventData.dart';
-import 'package:space_app/model/api/launchData.dart';
-import 'package:space_app/model/api/missionData.dart';
-import 'package:space_app/model/api/rocketData.dart';
-import 'package:space_app/model/api/spacestationData.dart';
 import 'package:sqflite/sqflite.dart';
 
 class APIDatabase {
@@ -27,17 +24,21 @@ class APIDatabase {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = directory.path + FILENAME;
     print('Initialized database');
-    Database db = await openDatabase(path, version: 3, onCreate: _createDB);
+    Database db = await openDatabase(path,
+        version: 8, onCreate: _createDB, onUpgrade: _upgradeDB);
     return db;
   }
 
   _createDB(Database db, int newVersion) async {
     await db.execute(EventData.sqlCreateQuery());
-    await db.execute(LaunchData.sqlCreateQuery());
-    await db.execute(MissionData.sqlCreateQuery());
-    await db.execute(RocketData.sqlCreateQuery());
-    await db.execute(SpacestationData.sqlCreateQuery());
+    await db.execute(AstronautData.sqlCreateQuery());
     print('Database create complete!');
+  }
+
+  _upgradeDB(Database db, int newVersion, int _) async {
+    await db.execute('DROP TABLE IF EXISTS ${EventData.eventTable}');
+    await db.execute('DROP TABLE IF EXISTS ${AstronautData.astronautTable}');
+    await _createDB(db, newVersion);
   }
 
   Future<List<EventData>> getAllEvents() async {
@@ -55,5 +56,22 @@ class APIDatabase {
   Future<int> insertEvent(EventData data) async {
     Database db = await this.database;
     return await db.insert(EventData.eventTable, data.asMap());
+  }
+
+  Future<List<AstronautData>> getAllAstronauts() async {
+    List<AstronautData> events = [];
+    Database db = await this.database;
+    List<Map<String, Object>> result =
+        await db.rawQuery('SELECT * FROM ${AstronautData.astronautTable}');
+
+    result.forEach((element) {
+      events.add(AstronautData.fromMapAPI(element));
+    });
+    return events;
+  }
+
+  Future<int> insertAstronaut(AstronautData data) async {
+    Database db = await this.database;
+    return await db.insert(AstronautData.astronautTable, data.asMap());
   }
 }
