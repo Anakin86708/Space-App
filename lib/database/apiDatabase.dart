@@ -27,7 +27,7 @@ class APIDatabase {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = directory.path + FILENAME;
     print('Initialized database');
-    Database db = await openDatabase(path, version: 2, onCreate: _createDB);
+    Database db = await openDatabase(path, version: 3, onCreate: _createDB);
     return db;
   }
 
