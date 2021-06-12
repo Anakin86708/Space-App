@@ -25,6 +25,9 @@ class AstronautsPage extends StatelessWidget {
 
   Widget _generateGrid(BuildContext context, state) {
     try {
+      if (state.data.length <= 0) {
+        throw Exception();
+      }
       return GridView.builder(
         itemCount: 100,
         gridDelegate:
@@ -35,9 +38,9 @@ class AstronautsPage extends StatelessWidget {
         ),
       );
     } on Exception catch (e) {
-       return Center(
-      child: CircularProgressIndicator(),
-    );
+      return Center(
+        child: CircularProgressIndicator(),
+      );
     }
   }
 }
