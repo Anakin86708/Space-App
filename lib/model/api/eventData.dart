@@ -13,9 +13,6 @@ class EventData {
   final String videoUrl;
   final String imageUrl;
   final String date;
-  final String launchID;
-  final String spacestationID;
-  final String programID;
 
   EventData(this.serverID,
       {this.url,
@@ -27,9 +24,7 @@ class EventData {
       this.videoUrl,
       this.imageUrl,
       this.date,
-      this.launchID,
-      this.spacestationID,
-      this.programID});
+ });
 
   factory EventData.fromMapAPI(Map<String, dynamic> map) {
     return EventData(map['id'],
@@ -42,9 +37,7 @@ class EventData {
         videoUrl: map['video_url'],
         imageUrl: map['feature_image'] ?? '',
         date: map['date'],
-        launchID: _getLaunch(map),
-        spacestationID: _getSpacestation(map),
-        programID: _getProgram(map));
+       );
   }
 
   static _getType(Map<String, dynamic> map) {
@@ -52,45 +45,6 @@ class EventData {
       return map['type'] is String ? map['type'] : map['type']['name'];
     }
     return '';
-  }
-
-  static String _getLaunch(Map<String, dynamic> map) {
-    try {
-      if (map['news_url'] == null) {
-        throw Exception();
-      }
-      return map['launches'].length > 0
-          ? map['launches'][0]['id'].toString()
-          : null;
-    } on Exception catch (e) {
-      return '';
-    }
-  }
-
-  static String _getProgram(Map<String, dynamic> map) {
-    try {
-      if (map['program'] == null) {
-        throw Exception();
-      }
-      return map['program'].length > 0
-          ? map['program'][0]['id'].toString()
-          : null;
-    } on Exception catch (e) {
-      return '';
-    }
-  }
-
-  static String _getSpacestation(Map<String, dynamic> map) {
-    try {
-      if (map['spacestations'] == null) {
-        throw Exception();
-      }
-      return map['spacestations'].length > 0
-          ? map['spacestations'][0]['id'].toString()
-          : null;
-    } on Exception catch (e) {
-      return '';
-    }
   }
 
   Map<String, dynamic> asMap() {
@@ -105,9 +59,6 @@ class EventData {
       'video_url': videoUrl,
       'feature_image': imageUrl,
       'date': date,
-      'launches': launchID,
-      'spacestations': spacestationID,
-      'program': programID,
     };
   }
 
@@ -138,10 +89,7 @@ class EventData {
         'news_url TEXT,'
         'video_url TEXT,'
         'feature_image TEXT,'
-        'date TEXT,'
-        'launches TEXT,'
-        'spacestations TEXT,'
-        'program TEXT'
+        'date TEXT'
         ')';
   }
 }
