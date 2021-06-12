@@ -26,18 +26,33 @@ class _InitialPageState extends State<InitialPage> {
   Widget build(BuildContext context) {
     BlocProvider.of<InitialBloc>(context).add(RequestListData());
     return BlocBuilder<InitialBloc, InitialStates>(
-        builder: (context, state)  => _build(context, state));
+        builder: (context, state) => _build(context, state));
   }
 }
 
 _build(BuildContext context, state) {
-  const padding = 16.0;  
+  const padding = 16.0;
   return Container(
     child: Padding(
       padding: const EdgeInsets.fromLTRB(padding, 0, padding, 0),
-      child: ListView.builder(
-        itemBuilder: (context, index) => new PostCard(data: PostData.fromEventData(state.data[index]),),
-      ),
+      child: genereteList(context, state),
     ),
   );
+}
+
+Widget genereteList(context, state) {
+  try {
+    if (state.data.length <= 0) {
+      throw RangeError('');
+    }
+    return ListView.builder(
+      itemBuilder: (context, index) => new PostCard(
+        data: PostData.fromEventData(state.data[index]),
+      ),
+    );
+  } on RangeError catch (e) {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
+  }
 }

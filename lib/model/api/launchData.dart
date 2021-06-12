@@ -3,7 +3,7 @@ import 'package:space_app/model/api/rocketData.dart';
 
 class LaunchData {
   static const eventTable = 'launch';
-  
+
   final int serverLaunchID;
   final String url;
   final String name;
@@ -41,7 +41,8 @@ class LaunchData {
 
   static String sqlCreateQuery() {
     return 'CREATE TABLE $eventTable ('
-        'serverLaunchID INTEGER PRIMARY KEY,'
+        'id INTEGER PRIMARY KEY AUTOINCREMENT,'
+        'serverLaunchID INTEGER,'
         'url TEXT,'
         'name TEXT,'
         'launchStatus TEXT,'

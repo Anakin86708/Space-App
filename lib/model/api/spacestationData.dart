@@ -15,7 +15,8 @@ class SpacestationData {
 
   static String sqlCreateQuery() {
     return 'CREATE TABLE $eventTable ('
-        'serverID INTEGER PRIMARY KEY,'
+        'id INTEGER PRIMARY KEY AUTOINCREMENT,'
+        'serverID INTEGER,'
         'url TEXT,'
         'name TEXT,'
         'status TEXT,'

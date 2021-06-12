@@ -27,7 +27,7 @@ class APIDatabase {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = directory.path + FILENAME;
     print('Initialized database');
-    Database db = await openDatabase(path, version: 1, onCreate: _createDB);
+    Database db = await openDatabase(path, version: 2, onCreate: _createDB);
     return db;
   }
 
@@ -37,12 +37,19 @@ class APIDatabase {
     await db.execute(MissionData.sqlCreateQuery());
     await db.execute(RocketData.sqlCreateQuery());
     await db.execute(SpacestationData.sqlCreateQuery());
+    print('Database create complete!');
   }
 
   Future<List<EventData>> getAllEvents() async {
+    List<EventData> events = [];
     Database db = await this.database;
     List<Map<String, Object>> result =
         await db.rawQuery('SELECT * FROM ${EventData.eventTable}');
+
+    result.forEach((element) {
+      events.add(EventData.fromMapAPI(element));
+    });
+    return events;
   }
 
   Future<int> insertEvent(EventData data) async {

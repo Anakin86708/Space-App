@@ -13,9 +13,9 @@ abstract class DefaultCardData {
     try {
       return FadeInImage(
         placeholder: AssetImage('assets/images/loading.gif'),
-        image: NetworkImage(imageUrl),
+        image: imageUrl != '' ? NetworkImage(imageUrl) : AssetImage('assets/images/404.png'),
       );
-    } on Exception catch (e) {
+    } on Exception catch (_) {
       return Image.asset('assets/images/404.png'); 
     }
   }

@@ -13,7 +13,8 @@ class MissionData {
 
   static String sqlCreateQuery() {
     return 'CREATE TABLE $eventTable ('
-        'serverID INTEGER PRIMARY KEY,'
+    'id INTEGER PRIMARY KEY AUTOINCREMENT,'
+        'serverID INTEGER,'
         'name TEXT,'
         'description TEXT,'
         'launchDesignator TEXT,'

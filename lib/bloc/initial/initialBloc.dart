@@ -27,9 +27,9 @@ class InitialBloc extends Bloc<InitialEvents, InitialStates> {
       // Get data from db
       print('Getting data from DB');
       data = await APIDatabase.helper.getAllEvents();
-      if (data == null) {
+      if (data == null || data.length <= 0) {
         print('Failed... Getting data from API');
-        data = await APIProvider.helper.getAllEvents();
+        data = await _getAndSaveDataFromAPI();
       }
     }
     return data;
@@ -37,5 +37,13 @@ class InitialBloc extends Bloc<InitialEvents, InitialStates> {
 
   bool _needNewData() {
     return false; // TODO: implementar o tempo para atualizar dados
+  }
+
+  Future<List<EventData>> _getAndSaveDataFromAPI() async {
+    List<EventData> data = await APIProvider.helper.getAllEvents();
+    data.forEach((element) {
+      APIDatabase.helper.insertEvent(element);
+    });
+    return data;
   }
 }

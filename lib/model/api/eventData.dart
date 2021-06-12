@@ -34,51 +34,91 @@ class EventData {
   factory EventData.fromMapAPI(Map<String, dynamic> map) {
     return EventData(map['id'],
         url: map['url'],
-        eventName: map['name'],
-        typeName: map['type']['name'],
-        description: map['description'],
+        eventName: map['name'] ?? '',
+        typeName: _getType(map),
+        description: map['description'] ?? '',
         location: map['location'],
         newsUrl: map['news_url'],
         videoUrl: map['video_url'],
-        imageUrl: map['feature_image'],
+        imageUrl: map['feature_image'] ?? '',
         date: map['date'],
-        launchID: map['launches'].length > 0
-            ? map['launches'][0]['id'].toString()
-            : null,
-        spacestationID: map['spacestations'].length > 0
-            ? map['spacestations'][0]['id'].toString()
-            : null,
-        programID: map['program'].length > 0
-            ? map['program'][0]['id'].toString()
-            : null);
+        launchID: _getLaunch(map),
+        spacestationID: _getSpacestation(map),
+        programID: _getProgram(map));
+  }
+
+  static _getType(Map<String, dynamic> map) {
+    if (map['type'] != null) {
+      return map['type'] is String ? map['type'] : map['type']['name'];
+    }
+    return '';
+  }
+
+  static String _getLaunch(Map<String, dynamic> map) {
+    try {
+      if (map['news_url'] == null) {
+        throw Exception();
+      }
+      return map['launches'].length > 0
+          ? map['launches'][0]['id'].toString()
+          : null;
+    } on Exception catch (e) {
+      return '';
+    }
+  }
+
+  static String _getProgram(Map<String, dynamic> map) {
+    try {
+      if (map['program'] == null) {
+        throw Exception();
+      }
+      return map['program'].length > 0
+          ? map['program'][0]['id'].toString()
+          : null;
+    } on Exception catch (e) {
+      return '';
+    }
+  }
+
+  static String _getSpacestation(Map<String, dynamic> map) {
+    try {
+      if (map['spacestations'] == null) {
+        throw Exception();
+      }
+      return map['spacestations'].length > 0
+          ? map['spacestations'][0]['id'].toString()
+          : null;
+    } on Exception catch (e) {
+      return '';
+    }
   }
 
   Map<String, dynamic> asMap() {
     return {
       'serverID': serverID,
       'url': url,
-      'eventName': eventName,
-      'typeName': typeName,
+      'name': eventName,
+      'type': typeName,
       'description': description,
       'location': location,
-      'newsUrl': newsUrl,
-      'videoUrl': videoUrl,
-      'imageUrl': imageUrl,
+      'news_url': newsUrl,
+      'video_url': videoUrl,
+      'feature_image': imageUrl,
       'date': date,
-      'launchID': launchID,
-      'spacestationID': spacestationID,
-      'programID': programID,
+      'launches': launchID,
+      'spacestations': spacestationID,
+      'program': programID,
     };
   }
 
   Map<String, Map<String, dynamic>> getMenuItemIconList() {
     return {
-      'newsUrl': {
+      'news_url': {
         'name': 'Notícias',
         'icon': Icon(Icons.link),
         'value': newsUrl
       },
-      'videoUrl': {
+      'video_url': {
         'name': 'Vídeo',
         'icon': Icon(Icons.play_circle),
         'value': videoUrl
@@ -88,19 +128,20 @@ class EventData {
 
   static String sqlCreateQuery() {
     return 'CREATE TABLE $eventTable ('
-        'serverID INTEGER PRIMARY KEY,'
+        'id INTEGER PRIMARY KEY AUTOINCREMENT,'
+        'serverID INTEGER,'
         'url TEXT,'
-        'eventName TEXT,'
-        'typeName TEXT,'
+        'name TEXT,'
+        'type TEXT,'
         'description TEXT,'
         'location TEXT,'
-        'newsUrl TEXT,'
-        'videoUrl TEXT,'
-        'imageUrl TEXT,'
+        'news_url TEXT,'
+        'video_url TEXT,'
+        'feature_image TEXT,'
         'date TEXT,'
-        'launchID TEXT,'
-        'spacestationID TEXT,'
-        'programID TEXT'
+        'launches TEXT,'
+        'spacestations TEXT,'
+        'program TEXT'
         ')';
   }
 }
