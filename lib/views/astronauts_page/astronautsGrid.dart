@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:space_app/bloc/apiAstronaut/astronautBloc.dart';
 import 'package:space_app/bloc/apiAstronaut/astronautEvents.dart';
 import 'package:space_app/bloc/apiAstronaut/astronautStates.dart';
+import 'package:space_app/model/api/astronautData.dart';
+import 'package:space_app/views/astronauts_page/astrounatsPage.dart';
 import 'package:space_app/views/astronauts_page/gridCard.dart';
 
-class AstronautsPage extends StatelessWidget {
+class AstronautsGrid extends StatelessWidget {
   static const padding = EdgeInsets.all(8.0);
 
   @override
@@ -34,7 +36,16 @@ class AstronautsPage extends StatelessWidget {
             SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (context, index) => Padding(
           padding: padding,
-          child: new AstronautGridCard.fromAstronautData(state.data[index]),
+          child: GestureDetector(
+            child: new AstronautGridCard.fromAstronautData(state.data[index]),
+            onTap: () {
+              print("clicou");
+              return Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AstronautsPage(state.data[index])));
+            },
+          ),
         ),
       );
     } on Exception catch (e) {
