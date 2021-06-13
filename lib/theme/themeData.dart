@@ -48,4 +48,8 @@ class AppTheme {
         "contentStyle": TextStyle(fontSize: 19),
         "contentJustify": TextAlign.justify
       };
+  static get titleForFavorites => {
+        'textStyle': TextStyle(fontSize: 20, color: AppColors.accent),
+        'textAlign': TextAlign.center,
+      };
 }

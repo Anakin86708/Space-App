@@ -6,11 +6,11 @@ import 'package:space_app/bloc/profile/profileEvents.dart';
 import 'package:space_app/bloc/profile/profileStates.dart';
 import 'package:space_app/model/userData.dart';
 
-class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
+class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthProvider _authenticationService;
   StreamSubscription _authenticationStream;
 
-  ProfileBloc() : super(UnloggedState()) {
+  AuthBloc() : super(UnloggedState()) {
     // Verificar no servidor se está logado
     _authenticationService = AuthProvider();
     _authenticationStream = _authenticationService.user.listen((event) {
@@ -20,7 +20,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   @override
-  Stream<ProfileState> mapEventToState(ProfileEvent event) async* {
+  Stream<AuthState> mapEventToState(AuthEvent event) async* {
     if (event is ChangeToRegisterEvent) {
       yield RegisterState();
     } else if (event is ChangeToLoginEvent) {
@@ -31,7 +31,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           UserData user =
               await _authenticationService.createUserWithEmailAndPassword(
                   email: event.email, password: event.password);
-          yield LoggedState(user);
+          yield SuccessLoggedState(user);
         } catch (e) {
           yield ErrorState(e.toString());
         }
@@ -40,7 +40,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           UserData user =
               await _authenticationService.signInWithEmailAndPassword(
                   email: event.email, password: event.password);
-          yield LoggedState(user);
+          yield SuccessLoggedState(user);
         } catch (e) {
           yield ErrorState(e.toString());
         }
@@ -55,7 +55,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       if (event.data == null) {
         yield UnloggedState();
       } else {
-        yield LoggedState(event.data);
+        yield SuccessLoggedState(event.data);
       }
     } else if (event is ErrorEvent) {
       yield ErrorState(event.message);

@@ -25,7 +25,7 @@ class ProfilePage extends StatelessWidget {
   Widget _logout(BuildContext context) {
     return ElevatedButton(
         onPressed: () {
-          BlocProvider.of<ProfileBloc>(context).add(Logout());
+          BlocProvider.of<AuthBloc>(context).add(Logout());
         },
         child: Text('Sair da conta'));
   }

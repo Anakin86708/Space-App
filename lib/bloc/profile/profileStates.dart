@@ -1,20 +1,20 @@
 import 'package:space_app/model/userData.dart';
 
-abstract class ProfileState {}
+abstract class AuthState {}
 
-class UnloggedState extends ProfileState {}
+class UnloggedState extends AuthState {}
 
-class RegisterState extends ProfileState {}
+class RegisterState extends AuthState {}
 
-class LogState extends ProfileState {}
+class LogState extends AuthState {}
 
-class LoggedState extends ProfileState {
+class SuccessLoggedState extends AuthState {
   final UserData user;
 
-  LoggedState(this.user);
+  SuccessLoggedState(this.user);
 }
 
-class ErrorState extends ProfileState {
+class ErrorState extends AuthState {
   final String message;
 
   ErrorState(this.message);

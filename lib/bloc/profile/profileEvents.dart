@@ -1,28 +1,28 @@
 import 'package:space_app/model/userData.dart';
 
-abstract class ProfileEvent {}
+abstract class AuthEvent {}
 
-class RegisterEvent extends ProfileEvent {}
+class RegisterEvent extends AuthEvent {}
 
-class ChangeToRegisterEvent extends ProfileEvent {}
+class ChangeToRegisterEvent extends AuthEvent {}
 
-class ChangeToLoginEvent extends ProfileEvent {}
+class ChangeToLoginEvent extends AuthEvent {}
 
-class SendDataEvent extends ProfileEvent {
+class SendDataEvent extends AuthEvent {
   String email;
   String password;
   SendDataEvent();
 }
 
-class ErrorEvent extends ProfileEvent {
+class ErrorEvent extends AuthEvent {
   final String message;
 
   ErrorEvent(this.message);
 }
 
-class Logout extends ProfileEvent {}
+class Logout extends AuthEvent {}
 
-class ServerEvent extends ProfileEvent {
+class ServerEvent extends AuthEvent {
   final UserData data;
 
   ServerEvent(this.data);
