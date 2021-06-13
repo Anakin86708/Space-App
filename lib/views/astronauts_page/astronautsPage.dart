@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:space_app/bloc/apiAstronaut/astronautBloc.dart';
+import 'package:space_app/bloc/apiAstronaut/astronautEvents.dart';
+import 'package:space_app/bloc/apiAstronaut/astronautStates.dart';
 import 'package:space_app/views/astronauts_page/gridCard.dart';
 
 class AstronautsPage extends StatelessWidget {
@@ -6,19 +10,37 @@ class AstronautsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<AstronautBloc>(context).add(RequestListData());
     return Scaffold(
       appBar: AppBar(
         title: Text('Astronautas'),
       ),
-      body: Container(child: _generateGrid(), margin: EdgeInsets.all(8.0),),
+      body: BlocBuilder<AstronautBloc, AstronautStates>(
+          builder: (context, state) => Container(
+                child: _generateGrid(context, state),
+                margin: EdgeInsets.all(8.0),
+              )),
     );
   }
 
-  Widget _generateGrid() {
-    return GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2), itemBuilder: (context, index) => Padding(
+  Widget _generateGrid(BuildContext context, state) {
+    try {
+      if (state.data.length <= 0) {
+        throw Exception();
+      }
+      return GridView.builder(
+        itemCount: 100,
+        gridDelegate:
+            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        itemBuilder: (context, index) => Padding(
           padding: padding,
-          child: new GridCard(),
-        ),);
+          child: new AstronautGridCard.fromAstronautData(state.data[index]),
+        ),
+      );
+    } on Exception catch (e) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
   }
 }

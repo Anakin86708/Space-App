@@ -5,9 +5,9 @@ import 'package:space_app/model/settingsData.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
-class DatabaseLocalServer {
-  static DatabaseLocalServer helper = DatabaseLocalServer._createInstance();
-  DatabaseLocalServer._createInstance();
+class SettingsDatabaseLocalServer {
+  static SettingsDatabaseLocalServer helper = SettingsDatabaseLocalServer._createInstance();
+  SettingsDatabaseLocalServer._createInstance();
 
   static Database _database;
 

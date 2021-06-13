@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:space_app/bloc/apiAstronaut/astronautBloc.dart';
+import 'package:space_app/bloc/initial/initialBloc.dart';
 import 'package:space_app/bloc/profile/profileBloc.dart';
 import 'package:space_app/routes/appRoutes.dart';
 import 'package:space_app/theme/themeData.dart';
@@ -21,6 +23,8 @@ class SpaceApp extends StatelessWidget {
         BlocProvider(create: (_) => DatabaseBloc()),
         BlocProvider(create: (_) => SettingsBloc()),
         BlocProvider(create: (_) => ProfileBloc()),
+        BlocProvider(create: (_) => InitialBloc()),
+        BlocProvider(create: (_) => AstronautBloc()),
       ],
       child: MaterialApp(
         theme: AppTheme.theme,
