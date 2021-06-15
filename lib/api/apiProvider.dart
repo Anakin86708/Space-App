@@ -35,7 +35,6 @@ class APIProvider {
     results.forEach((element) {
       list.add(EventData.fromMapAPI(element));
     });
-    requestUrl = response.data['next'];
 
     return list;
   }
