@@ -46,7 +46,7 @@ Widget genereteList(context, state) {
       throw RangeError('');
     }
     return ListView.builder(
-      itemCount: 100,
+      itemCount: state.data.length,
       itemBuilder: (context, index) => new PostCard(
         PostData.fromEventData(state.data[index]),
       ),
