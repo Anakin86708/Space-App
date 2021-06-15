@@ -56,19 +56,19 @@ class AstronautsPage extends StatelessWidget {
   }
 
   Widget banner() {
-    return Container(
-      constraints: BoxConstraints.expand(
-        height: 200.0,
+    return AspectRatio(
+      aspectRatio: 4 / 3,
+      child: Container(
+        constraints: BoxConstraints.expand(),
+        child: generateImage(),
       ),
-      child: generateImage(),
     );
   }
 
   Image generateImage() {
     return Image.network(
       data.profileImage,
-      fit: BoxFit
-          .cover, // fills the image as much as it can within its container.
+      fit: BoxFit.fill,
     );
   }
 
