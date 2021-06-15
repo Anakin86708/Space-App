@@ -15,6 +15,12 @@ class InitialBloc extends Bloc<InitialEvents, InitialStates> {
     if (event is RequestListData) {
       List<EventData> data = await _getEventsData();
       yield DataViewState(data);
+    } else if (event is RequestListFavorite) {
+      List<EventData> data = await _getEventsData();
+      List<EventData> favoriteData = []..addAll(data
+          .where((element) => event.favoritesIDs.contains(element.serverID)));
+
+      yield DataViewState(favoriteData);
     }
   }
 
