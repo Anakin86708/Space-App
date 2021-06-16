@@ -8,7 +8,7 @@ class AgenciesPage extends StatelessWidget {
   final AgencyData data;
 
   @override
- Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(data.name),
@@ -44,7 +44,6 @@ class AgenciesPage extends StatelessWidget {
                   _generateTitle(),
                   SizedBox(height: 20),
                   _generateContentText(),
-                  SizedBox(height: 20),
                 ],
               ),
             ),
@@ -83,11 +82,81 @@ class AgenciesPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // _generateAstronautStatus(),
-        // _generateAstronautAgency(),
-        // SizedBox(height: 10),
-        // _generateAstronautBio(),
+        _generateAgencyDescription(),
       ],
     );
+  }
+
+  Column _generateAgencyDescription() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              'Founding Year: ',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            ),
+            Text(
+              data.foundingYear,
+              style: TextStyle(fontSize: 15),
+            ),
+          ],
+        ),
+        _generateLaunches(),
+        _generateSpacecraft(),
+        SizedBox(height: 10),
+        Text(
+          data.description,
+          style: AppTheme.postStyle["contentStyle"],
+          textAlign: AppTheme.postStyle["contentJustify"],
+        ),
+      ],
+    );
+  }
+
+  _generateLaunches() {
+    var launches = (data.launchers);
+
+    if (launches != '') {
+      return Row(
+        children: [
+          Text(
+            'Total of Launches: ',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+          ),
+          Text(
+            data.launchers,
+            style: TextStyle(fontSize: 15),
+          ),
+        ],
+      );
+    } else {
+      return Text('');
+    }
+  }
+
+  _generateSpacecraft() {
+    var spacecraft = data.spacecraft;
+
+    if (spacecraft != '') {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Spacecraft: ',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+          ),
+          Expanded(
+            child: Text(
+              data.spacecraft,
+              style: TextStyle(fontSize: 15),
+            ),
+          ),
+        ],
+      );
+    } else {
+      return Text('');
+    }
   }
 }
