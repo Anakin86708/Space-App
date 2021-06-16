@@ -4,7 +4,7 @@ import 'package:space_app/model/api/agencyData.dart';
 import 'package:space_app/theme/themeData.dart';
 
 class AgenciesPage extends StatelessWidget {
-  const AgenciesPage(this.data) : super();
+  AgenciesPage(this.data) : super();
   final AgencyData data;
 
   @override
@@ -82,51 +82,28 @@ class AgenciesPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _generateAgencyDescription(),
-      ],
-    );
-  }
-
-  Column _generateAgencyDescription() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text(
-              'Founding Year: ',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-            ),
-            Text(
-              data.foundingYear,
-              style: TextStyle(fontSize: 15),
-            ),
-          ],
-        ),
+        _generateType(),
+        _generateFoundingYear(),
         _generateLaunches(),
         _generateSpacecraft(),
         SizedBox(height: 10),
-        Text(
-          data.description,
-          style: AppTheme.postStyle["contentStyle"],
-          textAlign: AppTheme.postStyle["contentJustify"],
-        ),
+        _generateDescription(),
       ],
     );
   }
 
-  _generateLaunches() {
-    var launches = (data.launchers);
+  Widget _generateType() {
+    var type = data.type;
 
-    if (launches != '') {
+    if (type != '') {
       return Row(
         children: [
           Text(
-            'Total of Launches: ',
+            'Type: ',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
           ),
           Text(
-            data.launchers,
+            type,
             style: TextStyle(fontSize: 15),
           ),
         ],
@@ -136,7 +113,43 @@ class AgenciesPage extends StatelessWidget {
     }
   }
 
-  _generateSpacecraft() {
+  Row _generateFoundingYear() {
+    return Row(
+      children: [
+        Text(
+          'Founding Year: ',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+        ),
+        Text(
+          data.foundingYear,
+          style: TextStyle(fontSize: 15),
+        ),
+      ],
+    );
+  }
+
+  Widget _generateLaunches() {
+    var launches = (data.launchers);
+
+    if (launches != '') {
+      return Row(
+        children: [
+          Text(
+            'Launches: ',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+          ),
+          Text(
+            launches,
+            style: TextStyle(fontSize: 15),
+          ),
+        ],
+      );
+    } else {
+      return Text('');
+    }
+  }
+
+  Widget _generateSpacecraft() {
     var spacecraft = data.spacecraft;
 
     if (spacecraft != '') {
@@ -149,7 +162,7 @@ class AgenciesPage extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              data.spacecraft,
+              spacecraft,
               style: TextStyle(fontSize: 15),
             ),
           ),
@@ -158,5 +171,13 @@ class AgenciesPage extends StatelessWidget {
     } else {
       return Text('');
     }
+  }
+
+  Text _generateDescription() {
+    return Text(
+      data.description,
+      style: AppTheme.postStyle["contentStyle"],
+      textAlign: AppTheme.postStyle["contentJustify"],
+    );
   }
 }

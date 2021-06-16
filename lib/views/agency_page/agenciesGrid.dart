@@ -9,7 +9,7 @@ import 'agenciesPage.dart';
 
 class AgenciesGrid extends StatelessWidget {
   static const padding = EdgeInsets.all(8.0);
-  
+
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<AgencyBloc>(context).add(RequestListData());
@@ -18,10 +18,12 @@ class AgenciesGrid extends StatelessWidget {
           title: Text(
         "Agencies",
       )),
-      body: BlocBuilder<AgencyBloc, AgencyStates>(builder: (context, state) => Container(
-        child: _generateGrid(context, state),
-        margin: EdgeInsets.all(8.0),
-      ),),
+      body: BlocBuilder<AgencyBloc, AgencyStates>(
+        builder: (context, state) => Container(
+          child: _generateGrid(context, state),
+          margin: EdgeInsets.all(8.0),
+        ),
+      ),
     );
   }
 
@@ -39,7 +41,6 @@ class AgenciesGrid extends StatelessWidget {
           child: GestureDetector(
             child: new AgencyGridCard.fromAgencyData(state.data[index]),
             onTap: () {
-              print("clicou");
               return Navigator.push(
                   context,
                   MaterialPageRoute(
