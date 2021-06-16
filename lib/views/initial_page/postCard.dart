@@ -4,16 +4,11 @@ import 'package:space_app/theme/themeData.dart';
 import 'package:space_app/views/post_page/postPage.dart';
 
 class PostCard extends StatefulWidget {
-  static const cardPadding = const EdgeInsets.all(16.0);
+  static const _paddingValue = 16.0;
+  static const cardPadding = const EdgeInsets.all(_paddingValue);
   PostData data;
 
-  PostCard(
-      {String title = 'Title',
-      String content = 'Content',
-      String imageUrl = '',
-      bool isFavorited = false}) {
-    data = PostData(title, content, imageUrl, isFavorited: isFavorited);
-  }
+  PostCard({this.data});
 
   @override
   _PostCardState createState() => _PostCardState();
@@ -35,7 +30,7 @@ class _PostCardState extends State<PostCard> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Row(children: _buildTitle(context)),
+                SizedBox(child: Row(children: _buildTitle(context)), width: MediaQuery.of(context).size.width - (2*PostCard._paddingValue),),
                 SizedBox(height: 5),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,7 +46,14 @@ class _PostCardState extends State<PostCard> {
 
   List<Widget> _buildTitle(BuildContext context) {
     return [
-      Text(widget.data.title, style: AppTheme.cardStyle['titleStyle']),
+      SizedBox(
+          child: Text(
+            widget.data.title,
+            style: AppTheme.cardStyle['titleStyle'],
+            overflow: TextOverflow.clip,
+            softWrap: true,
+          ),
+          width: MediaQuery.of(context).size.width - (2*PostCard._paddingValue) - 128),
       Spacer(),
       _buildStarButton(context),
     ];
@@ -92,8 +94,11 @@ class _PostCardState extends State<PostCard> {
   List<Widget> _buildContent() {
     return [
       Expanded(
-        child:
-            Text(widget.data.content, style: AppTheme.cardStyle['textStyle']),
+        child: Text(
+          widget.data.content,
+          style: AppTheme.cardStyle['textStyle'],
+          maxLines: 5,
+        ),
         flex: 5,
       ),
       Spacer(flex: 1),
