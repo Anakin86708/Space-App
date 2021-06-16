@@ -5,5 +5,6 @@ class UserData {
 
   UserData(this.uid) {
     FavoriteDatabase.user = this;
+    FavoriteDatabase.helper.prepareUserFavorite();
   }
 }

@@ -7,7 +7,7 @@ class PostData extends DefaultCardData {
   EventData data;
   PostData(String title, String content, String imageUrl,
       {bool isFavorited = false, this.data})
-      : super(title, content, imageUrl,
+      : super(data.serverID,title, content, imageUrl,
             isFavorited: PostData._isFavorite(data));
 
   factory PostData.fromEventData(EventData data) {

@@ -31,12 +31,11 @@ class _FavoritePageState extends State<FavoritePage> {
 
   @override
   Widget build(BuildContext context) {
-    FavoriteDatabase.helper.getFavorites();
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state is SuccessLoggedState) {
           BlocProvider.of<InitialBloc>(context)
-              .add(RequestListFavorite(FavoriteDatabase.favoritesIDs));
+              .add(RequestListFavorite());
           return _buildListFavorites(state);
         }
         return _buildLoginMessage(context);

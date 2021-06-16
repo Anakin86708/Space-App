@@ -3,6 +3,7 @@ import 'package:space_app/api/apiProvider.dart';
 import 'package:space_app/bloc/initial/initialEvents.dart';
 import 'package:space_app/bloc/initial/initialStates.dart';
 import 'package:space_app/database/apiDatabase.dart';
+import 'package:space_app/database/favoritesDatabase.dart';
 import 'package:space_app/model/api/eventData.dart';
 
 class InitialBloc extends Bloc<InitialEvents, InitialStates> {
@@ -17,8 +18,10 @@ class InitialBloc extends Bloc<InitialEvents, InitialStates> {
       yield DataViewState(data);
     } else if (event is RequestListFavorite) {
       List<EventData> data = await _getEventsData();
-      List<EventData> favoriteData = []..addAll(data
-          .where((element) => event.favoritesIDs.contains(element.serverID)));
+      List<int> favoritesIDs = await FavoriteDatabase.helper.getFavorites();
+      print('Favorites: $favoritesIDs');
+      List<EventData> favoriteData = []..addAll(
+          data.where((element) => favoritesIDs.contains(element.serverID)));
 
       yield DataViewState(favoriteData);
     }
