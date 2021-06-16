@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:space_app/model/postData.dart';
+import 'package:space_app/views/agency_page/agenciesGrid.dart';
 import 'package:space_app/views/astronauts_page/astronautsGrid.dart';
 import 'package:space_app/views/initialLayout.dart';
 import 'package:space_app/views/post_page/postPage.dart';
@@ -10,7 +11,7 @@ class AppRoutes {
     '/': (context) => InitialLayout(),
     '/settings': (context) => SettingsPage(),
     '/astronautas': (context) => AstronautsGrid(),
-    '/agências': (context) => null,
+    '/agências': (context) => AgenciesGrid(),
     '/eventos': (context) => null,
     '/ISS': (context) => null,
   };

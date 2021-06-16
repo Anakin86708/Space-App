@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
+import 'package:space_app/model/api/agencyData.dart';
 import 'package:space_app/model/api/astronautData.dart';
 import 'package:space_app/model/api/eventData.dart';
 import 'package:sqflite/sqflite.dart';
@@ -32,12 +33,14 @@ class APIDatabase {
   _createDB(Database db, int newVersion) async {
     await db.execute(EventData.sqlCreateQuery());
     await db.execute(AstronautData.sqlCreateQuery());
+    await db.execute(AgencyData.sqlCreateQuery());
     print('Database create complete!');
   }
 
   _upgradeDB(Database db, int newVersion, int _) async {
     await db.execute('DROP TABLE IF EXISTS ${EventData.eventTable}');
     await db.execute('DROP TABLE IF EXISTS ${AstronautData.astronautTable}');
+    await db.execute('DROP TABLE IF EXISTS ${AgencyData.agencyTable}');
     await _createDB(db, newVersion);
   }
 
@@ -73,5 +76,22 @@ class APIDatabase {
   Future<int> insertAstronaut(AstronautData data) async {
     Database db = await this.database;
     return await db.insert(AstronautData.astronautTable, data.asMap());
+  }
+
+  Future<List<AgencyData>> getAllAgencies() async {
+    List<AgencyData> events = [];
+    Database db = await this.database;
+    List<Map<String, Object>> result =
+        await db.rawQuery('SELECT * FROM ${AgencyData.agencyTable}');
+
+    result.forEach((element) {
+      events.add(AgencyData.fromMapAPI(element));
+    });
+    return events;
+  }
+
+  Future<int> insertAgency(AgencyData data) async {
+    Database db = await this.database;
+    return await db.insert(AgencyData.agencyTable, data.asMap());
   }
 }
