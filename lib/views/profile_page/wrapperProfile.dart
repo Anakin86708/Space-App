@@ -15,7 +15,7 @@ class WrapperProfile extends StatelessWidget implements InterfacePage {
   Icon get pageIcon => Icon(Icons.person);
 
   @override
-  String get pageName => "Perfil";
+  String get pageName => "Profile";
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class WrapperProfile extends StatelessWidget implements InterfacePage {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: Text("Erro do Servidor"),
+                  title: Text("Server Error"),
                   content: Text("${state.message}"),
                   actions: [
                     ElevatedButton(
@@ -75,7 +75,7 @@ class WrapperProfile extends StatelessWidget implements InterfacePage {
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
         decoration:
-            InputDecoration(labelText: "E-mail", hintText: "usuario@gmail.com"),
+            InputDecoration(labelText: "E-mail", hintText: "user@gmail.com"),
         onSaved: (String userValue) {
           data.email = userValue;
         },
@@ -92,8 +92,9 @@ class WrapperProfile extends StatelessWidget implements InterfacePage {
         onSaved: (String userValue) {
           data.password = userValue;
         },
-        validator: (value) =>
-            value.length >= 6 ? null : 'Senha deve ter ao menos 6 caracteres',
+        validator: (value) => value.length >= 6
+            ? null
+            : 'Password must have at least 6 caracteres',
       ),
     );
   }
@@ -107,15 +108,15 @@ class WrapperProfile extends StatelessWidget implements InterfacePage {
           BlocProvider.of<ProfileBloc>(context).add(data);
         }
       },
-      child: state is LogState ? Text("Login") : Text("Registrar"),
+      child: state is LogState ? Text("Login") : Text("Register"),
     );
   }
 
   Widget _generateChangeText(BuildContext context, ProfileState state) {
     TextStyle style = TextStyle(color: AppColors.secondary);
     return state is LogState
-        ? Text('Ainda não tem uma conta?', style: style)
-        : Text('Já possui uma conta?', style: style);
+        ? Text("Don't have an account?", style: style)
+        : Text('Already have an account?', style: style);
   }
 
   Widget _generateChangeButton(BuildContext context, ProfileState state) {
@@ -127,7 +128,7 @@ class WrapperProfile extends StatelessWidget implements InterfacePage {
         print('Current state $state');
         BlocProvider.of<ProfileBloc>(context).add(event);
       },
-      child: state is LogState ? Text("Criar uma") : Text("Realizar login"),
+      child: state is LogState ? Text("Create one") : Text("Log in"),
     );
   }
 }

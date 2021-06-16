@@ -21,9 +21,8 @@ class _InitialLayoutState extends State<InitialLayout> {
   ];
   // Nome deve estar de acordo com a rota
   List<String> _drawerItensNames = [
-    'astronautas',
-    'agências',
-    'eventos',
+    'astronauts',
+    'agencies',
     'ISS',
   ];
 

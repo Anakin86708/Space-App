@@ -4,7 +4,7 @@ import 'package:space_app/views/initial_page/postCard.dart';
 
 class FavoritePage extends StatefulWidget implements InterfacePage {
   final Icon _pageIcon = Icon(Icons.star);
-  final String _pageName = 'Favoritos';
+  final String _pageName = 'Favorites';
 
   @override
   _FavoritePageState createState() => _FavoritePageState();
@@ -18,7 +18,7 @@ class FavoritePage extends StatefulWidget implements InterfacePage {
 
 class _FavoritePageState extends State<FavoritePage> {
   static const padding = 16.0;
-  
+
   @override
   Widget build(BuildContext context) {
     return Container(

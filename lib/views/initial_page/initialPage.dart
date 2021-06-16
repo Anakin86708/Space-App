@@ -9,7 +9,7 @@ import 'package:space_app/views/initial_page/postCard.dart';
 
 class InitialPage extends StatefulWidget implements InterfacePage {
   final Icon _pageIcon = Icon(Icons.article);
-  final String _pageName = 'Notícias';
+  final String _pageName = 'News';
 
   @override
   _InitialPageState createState() => _InitialPageState();

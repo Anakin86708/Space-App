@@ -112,7 +112,7 @@ class PostPageState extends State<PostPage> {
 
   generateElevatedButton() {
     return ElevatedButton(
-      child: Text("Mais Informações"),
+      child: Text("More info"),
       style: ElevatedButton.styleFrom(
           primary: AppColors.accent,
           onPrimary: Colors.black,

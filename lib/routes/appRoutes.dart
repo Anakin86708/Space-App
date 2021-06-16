@@ -10,9 +10,8 @@ class AppRoutes {
   static final Map<String, Widget Function(BuildContext)> routes = {
     '/': (context) => InitialLayout(),
     '/settings': (context) => SettingsPage(),
-    '/astronautas': (context) => AstronautsGrid(),
-    '/agências': (context) => AgenciesGrid(),
-    '/eventos': (context) => null,
+    '/astronauts': (context) => AstronautsGrid(),
+    '/agencies': (context) => AgenciesGrid(),
     '/ISS': (context) => null,
   };
 }

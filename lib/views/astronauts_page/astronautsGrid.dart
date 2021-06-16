@@ -15,7 +15,7 @@ class AstronautsGrid extends StatelessWidget {
     BlocProvider.of<AstronautBloc>(context).add(RequestListData());
     return Scaffold(
       appBar: AppBar(
-        title: Text('Astronautas'),
+        title: Text('Astronauts'),
       ),
       body: BlocBuilder<AstronautBloc, AstronautStates>(
           builder: (context, state) => Container(
