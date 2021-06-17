@@ -18,14 +18,14 @@ class FavoriteDatabase {
     // for (var doc in snapshot.data()) {
     //   List list = (doc.data() as Map)['index'];
     // }
-      favorites.addAll((snapshot.data() as Map)['index'].whereType<int>());
+    favorites.addAll((snapshot.data() as Map)['index'].whereType<int>());
     favoritesIDs = favorites;
     return favorites;
   }
 
   prepareUserFavorite() {
     try {
-      favoritesCollection.add({'': user.uid});
+      favoritesCollection.doc(user.uid).set({'index':[]});
     } on Exception catch (e) {
       print('Cannot prepare user ${user.uid}');
     }
