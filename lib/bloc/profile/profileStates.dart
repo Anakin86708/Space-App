@@ -6,7 +6,7 @@ class UnloggedState extends AuthState {}
 
 class RegisterState extends AuthState {}
 
-class LogState extends AuthState {}
+class LoginState extends AuthState {}
 
 class SuccessLoggedState extends AuthState {
   final UserData user;

@@ -108,13 +108,13 @@ class WrapperProfile extends StatelessWidget implements InterfacePage {
           BlocProvider.of<AuthBloc>(context).add(data);
         }
       },
-      child: state is LogState ? Text("Login") : Text("Register"),
+      child: state is LoginState ? Text("Login") : Text("Register"),
     );
   }
 
   Widget _generateChangeText(BuildContext context, AuthState state) {
     TextStyle style = TextStyle(color: AppColors.secondary);
-    return state is LogState
+    return state is LoginState
         ? Text("Don't have an account?", style: style)
         : Text('Already have an account?', style: style);
   }
@@ -123,12 +123,12 @@ class WrapperProfile extends StatelessWidget implements InterfacePage {
     return ElevatedButton(
       onPressed: () {
         AuthEvent event =
-            state is LogState ? ChangeToRegisterEvent() : ChangeToLoginEvent();
+            state is LoginState ? ChangeToRegisterEvent() : ChangeToLoginEvent();
         print('Changing state to $event');
         print('Current state $state');
         BlocProvider.of<AuthBloc>(context).add(event);
       },
-      child: state is LogState ? Text("Create one") : Text("Log in"),
+      child: state is LoginState ? Text("Create one") : Text("Log in"),
     );
   }
 }

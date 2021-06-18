@@ -24,29 +24,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (event is ChangeToRegisterEvent) {
       yield RegisterState();
     } else if (event is ChangeToLoginEvent) {
-      yield LogState();
+      yield LoginState();
     } else if (event is SendDataEvent) {
       if (state is RegisterState) {
-        try {
-          UserData user =
-              await _authenticationService.createUserWithEmailAndPassword(
-                  email: event.email, password: event.password);
-          yield SuccessLoggedState(user);
-        } catch (e) {
-          yield ErrorState(e.toString());
-        }
-      } else if (state is LogState) {
-        try {
-          UserData user =
-              await _authenticationService.signInWithEmailAndPassword(
-                  email: event.email, password: event.password);
-          yield SuccessLoggedState(user);
-        } catch (e) {
-          yield ErrorState(e.toString());
-        }
-        // Verificar o login
-        // Se correto, yield Logged
-        // Senão yield error
+        yield await _registerState(event);
+      } else if (state is LoginState) {
+        yield await _loginState(event);
       }
     } else if (event is Logout) {
       await _authenticationService.signOut();
@@ -60,5 +43,32 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } else if (event is ErrorEvent) {
       yield ErrorState(event.message);
     }
+  }
+
+  _loginState(SendDataEvent event) async {
+    try {
+      UserData user =
+          await _authenticationService.signInWithEmailAndPassword(
+              email: event.email, password: event.password);
+      return SuccessLoggedState(user);
+    } catch (e) {
+      return ErrorState(e.toString());
+    }
+  }
+
+  _registerState(SendDataEvent event) async {
+    try {
+      UserData user =
+          await _authenticationService.createUserWithEmailAndPassword(
+              email: event.email, password: event.password);
+      return SuccessLoggedState(user);
+    } catch (e) {
+      return ErrorState(e.toString());
+    }
+  }
+
+   close() {
+    _authenticationStream.cancel();
+    return super.close();
   }
 }

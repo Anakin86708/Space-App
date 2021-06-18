@@ -22,7 +22,6 @@ class AstronautBloc extends Bloc<AstronautEvents, AstronautStates> {
       print('Getting data from API');
       data = await APIProvider.helper.getAllAstronauts();
     } else {
-      // Get data from db
       print('Getting data from DB');
       data = await APIDatabase.helper.getAllAstronauts();
       if (data == null || data.length <= 0) {
