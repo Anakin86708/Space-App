@@ -5,7 +5,6 @@ class FavoriteDatabase {
   static UserData user;
   static FavoriteDatabase helper = FavoriteDatabase._createInstance();
   static List<int> favoritesIDs = [];
-  static String _favoriteCollectionName = 'my_favorites';
 
   FavoriteDatabase._createInstance();
 
@@ -15,20 +14,16 @@ class FavoriteDatabase {
   Future<List<int>> getFavorites() async {
     List<int> favorites = [];
     DocumentSnapshot snapshot = await favoritesCollection.doc(user.uid).get();
-    // for (var doc in snapshot.data()) {
-    //   List list = (doc.data() as Map)['index'];
-    // }
-    favorites.addAll((snapshot.data() as Map)['index'].whereType<int>());
-    favoritesIDs = favorites;
-    return favorites;
-  }
-
-  prepareUserFavorite() {
     try {
-      favoritesCollection.doc(user.uid).set({'index':[]});
+      if (snapshot.data() == null) {
+        throw Exception();
+      }
+      favorites.addAll((snapshot.data() as Map)['index'].whereType<int>());
+      favoritesIDs = favorites;
     } on Exception catch (e) {
-      print('Cannot prepare user ${user.uid}');
+      print('Empty favorites');
     }
+    return favorites;
   }
 
   insertFavorite(int indexToInsert) async {
@@ -44,5 +39,9 @@ class FavoriteDatabase {
         // .collection(_favoriteCollectionName)
         // .doc('index')
         .set({'index': currentList});
+  }
+
+  bool userNotExists() {
+    return favoritesCollection.doc(user.uid).get() == null;
   }
 }

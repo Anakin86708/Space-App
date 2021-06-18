@@ -5,6 +5,7 @@ class UserData {
 
   UserData(this.uid) {
     FavoriteDatabase.user = this;
-    FavoriteDatabase.helper.prepareUserFavorite();
+    // FavoriteDatabase.helper.prepareUserFavorite();
+    FavoriteDatabase.helper.getFavorites().then((value) => FavoriteDatabase.favoritesIDs = value);
   }
 }
