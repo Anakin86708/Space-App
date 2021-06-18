@@ -1,10 +1,9 @@
 import 'package:space_app/model/api/eventData.dart';
 
-abstract class InitialStates {}
+abstract class DataStates {}
 
-class DataViewState extends InitialStates {
+class DataViewState extends DataStates {
   final List<EventData> data;
 
   DataViewState(this.data);
-
 }

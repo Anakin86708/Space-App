@@ -1,18 +1,18 @@
 import 'package:bloc/bloc.dart';
 import 'package:space_app/api/apiProvider.dart';
-import 'package:space_app/bloc/initial/initialEvents.dart';
-import 'package:space_app/bloc/initial/initialStates.dart';
+import 'package:space_app/bloc/data/dataEvents.dart';
+import 'package:space_app/bloc/data/dataStates.dart';
 import 'package:space_app/database/apiDatabase.dart';
 import 'package:space_app/database/favoritesDatabase.dart';
 import 'package:space_app/model/api/eventData.dart';
 
-class InitialBloc extends Bloc<InitialEvents, InitialStates> {
-  InitialBloc() : super(DataViewState([])) {
+class DataBloc extends Bloc<DataEvents, DataStates> {
+  DataBloc() : super(DataViewState([])) {
     add(RequestListData());
   }
 
   @override
-  Stream<InitialStates> mapEventToState(InitialEvents event) async* {
+  Stream<DataStates> mapEventToState(DataEvents event) async* {
     if (event is RequestListData) {
       List<EventData> data = await _getEventsData();
       yield DataViewState(data);

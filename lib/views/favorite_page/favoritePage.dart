@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:space_app/bloc/initial/initialBloc.dart';
-import 'package:space_app/bloc/initial/initialEvents.dart';
-import 'package:space_app/bloc/initial/initialStates.dart';
+import 'package:space_app/bloc/data/dataBloc.dart';
+import 'package:space_app/bloc/data/dataEvents.dart';
+import 'package:space_app/bloc/data/dataStates.dart';
 import 'package:space_app/bloc/profile/profileBloc.dart';
 import 'package:space_app/bloc/profile/profileEvents.dart';
 import 'package:space_app/bloc/profile/profileStates.dart';
@@ -33,7 +33,7 @@ class _FavoritePageState extends State<FavoritePage> {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state is SuccessLoggedState) {
-          BlocProvider.of<InitialBloc>(context)
+          BlocProvider.of<DataBloc>(context)
               .add(RequestListFavorite());
           return _buildListFavorites(state);
         }
@@ -43,7 +43,7 @@ class _FavoritePageState extends State<FavoritePage> {
   }
 
   _buildListFavorites(state) {
-    return BlocBuilder<InitialBloc, InitialStates>(
+    return BlocBuilder<DataBloc, DataStates>(
       builder: (context, dataState) => Container(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(padding, 0, padding, 0),
