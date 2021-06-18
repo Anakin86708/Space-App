@@ -26,7 +26,7 @@ class APIDatabase {
     String path = directory.path + FILENAME;
     print('Initialized database');
     Database db = await openDatabase(path,
-        version: 8, onCreate: _createDB, onUpgrade: _upgradeDB);
+        version: 9, onCreate: _createDB, onUpgrade: _upgradeDB);
     return db;
   }
 

@@ -19,10 +19,10 @@ class WrapperProfile extends StatelessWidget implements InterfacePage {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ProfileBloc, ProfileState>(
+    return BlocConsumer<AuthBloc, AuthState>(
       builder: (context, state) {
         print(state);
-        if (state is LoggedState) {
+        if (state is SuccessLoggedState) {
           return ProfilePage(state.user);
         }
         return _buildFormInterface(context, state);
@@ -49,7 +49,7 @@ class WrapperProfile extends StatelessWidget implements InterfacePage {
     );
   }
 
-  Widget _buildFormInterface(BuildContext context, ProfileState state) {
+  Widget _buildFormInterface(BuildContext context, AuthState state) {
     return Container(
         child: Center(
       child: Form(
@@ -69,7 +69,7 @@ class WrapperProfile extends StatelessWidget implements InterfacePage {
     ));
   }
 
-  Widget _emailFormField(ProfileState state) {
+  Widget _emailFormField(AuthState state) {
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: TextFormField(
@@ -83,7 +83,7 @@ class WrapperProfile extends StatelessWidget implements InterfacePage {
     );
   }
 
-  Widget _passwordFormField(ProfileState state) {
+  Widget _passwordFormField(AuthState state) {
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: TextFormField(
@@ -99,34 +99,34 @@ class WrapperProfile extends StatelessWidget implements InterfacePage {
     );
   }
 
-  Widget _generateFormButton(BuildContext context, ProfileState state) {
+  Widget _generateFormButton(BuildContext context, AuthState state) {
     return ElevatedButton(
       onPressed: () {
         if (formKey.currentState.validate()) {
           formKey.currentState.save();
           print('Pressed');
-          BlocProvider.of<ProfileBloc>(context).add(data);
+          BlocProvider.of<AuthBloc>(context).add(data);
         }
       },
       child: state is LogState ? Text("Login") : Text("Register"),
     );
   }
 
-  Widget _generateChangeText(BuildContext context, ProfileState state) {
+  Widget _generateChangeText(BuildContext context, AuthState state) {
     TextStyle style = TextStyle(color: AppColors.secondary);
     return state is LogState
         ? Text("Don't have an account?", style: style)
         : Text('Already have an account?', style: style);
   }
 
-  Widget _generateChangeButton(BuildContext context, ProfileState state) {
+  Widget _generateChangeButton(BuildContext context, AuthState state) {
     return ElevatedButton(
       onPressed: () {
-        ProfileEvent event =
+        AuthEvent event =
             state is LogState ? ChangeToRegisterEvent() : ChangeToLoginEvent();
         print('Changing state to $event');
         print('Current state $state');
-        BlocProvider.of<ProfileBloc>(context).add(event);
+        BlocProvider.of<AuthBloc>(context).add(event);
       },
       child: state is LogState ? Text("Create one") : Text("Log in"),
     );

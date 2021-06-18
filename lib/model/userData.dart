@@ -1,5 +1,11 @@
-class UserData {
-  final String uid;
+import 'package:space_app/database/favoritesDatabase.dart';
 
-  UserData(this.uid);
+class UserData {
+  String uid;
+
+  UserData(this.uid) {
+    FavoriteDatabase.user = this;
+    // FavoriteDatabase.helper.prepareUserFavorite();
+    FavoriteDatabase.helper.getFavorites().then((value) => FavoriteDatabase.favoritesIDs = value);
+  }
 }

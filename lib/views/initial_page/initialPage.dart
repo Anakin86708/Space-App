@@ -46,12 +46,12 @@ Widget genereteList(context, state) {
       throw RangeError('');
     }
     return ListView.builder(
-      itemCount: 100,
+      itemCount: state.data.length,
       itemBuilder: (context, index) => new PostCard(
-        data: PostData.fromEventData(state.data[index]),
+        PostData.fromEventData(state.data[index]),
       ),
     );
-  } on RangeError catch (e) {
+  } on RangeError catch (_) {
     return Center(
       child: CircularProgressIndicator(),
     );

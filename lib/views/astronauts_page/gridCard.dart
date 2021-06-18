@@ -15,7 +15,7 @@ class AstronautGridCard extends StatefulWidget {
       bool isFavorited = false,
       this.apiData}) {
     data =
-        LocalAstronautData(title, content, imageUrl, isFavorited: isFavorited);
+        LocalAstronautData(title, content, imageUrl, isFavorited: isFavorited, data: apiData);
   }
 
   factory AstronautGridCard.fromAstronautData(AstronautData data) {

@@ -48,7 +48,7 @@ class AstronautsGrid extends StatelessWidget {
           ),
         ),
       );
-    } on Exception catch (e) {
+    } on Exception catch (_) {
       return Center(
         child: CircularProgressIndicator(),
       );

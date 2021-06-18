@@ -23,7 +23,7 @@ class SpaceApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => DatabaseBloc()),
         BlocProvider(create: (_) => SettingsBloc()),
-        BlocProvider(create: (_) => ProfileBloc()),
+        BlocProvider(create: (_) => AuthBloc()),
         BlocProvider(create: (_) => InitialBloc()),
         BlocProvider(create: (_) => AstronautBloc()),
         BlocProvider(create: (_) => AgencyBloc()),

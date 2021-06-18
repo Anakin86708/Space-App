@@ -8,7 +8,7 @@ class PostCard extends StatefulWidget {
   static const cardPadding = const EdgeInsets.all(_paddingValue);
   PostData data;
 
-  PostCard({this.data});
+  PostCard(this.data);
 
   @override
   _PostCardState createState() => _PostCardState();

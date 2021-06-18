@@ -13,7 +13,7 @@ class AgencyGridCard extends StatefulWidget {
       String content = 'Content',
       String imageUrl = '',
       this.apiData}) {
-    data = LocalAgencyData(title, content, imageUrl);
+    data = LocalAgencyData(title, content, imageUrl, data: apiData);
   }
 
   factory AgencyGridCard.fromAgencyData(AgencyData data) {

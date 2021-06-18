@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:space_app/database/favoritesDatabase.dart';
 import 'package:space_app/model/userData.dart';
 
 class AuthProvider {
@@ -36,5 +37,6 @@ class AuthProvider {
 
   signOut() async {
     await _firebaseAuth.signOut();
+    FavoriteDatabase.favoritesIDs = [];
   }
 }

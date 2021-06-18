@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:space_app/bloc/profile/profileBloc.dart';
+import 'package:space_app/bloc/profile/profileStates.dart';
 import 'package:space_app/theme/appColors.dart';
 import 'package:space_app/theme/themeData.dart';
 import 'package:space_app/views/favorite_page/favoritePage.dart';
 import 'package:space_app/views/initial_page/initialPage.dart';
 import 'package:space_app/views/interfacePage.dart';
-import 'package:space_app/views/profile_page/profilePage.dart';
 import 'package:space_app/views/profile_page/wrapperProfile.dart';
 
 class InitialLayout extends StatefulWidget {
@@ -28,15 +30,25 @@ class _InitialLayoutState extends State<InitialLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.theme.backgroundColor,
-      appBar: AppBar(
-        title: Text('SpaceApp', style: TextStyle(color: AppColors.secondary)),
-        brightness: Brightness.dark,
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is RegisterState) {
+          setState(() {
+            _currentPage = 2;
+          });
+          print('Changeing');
+        }
+      },
+      child: Scaffold(
+        backgroundColor: AppTheme.theme.backgroundColor,
+        appBar: AppBar(
+          title: Text('SpaceApp', style: TextStyle(color: AppColors.secondary)),
+          brightness: Brightness.dark,
+        ),
+        body: _pages[_currentPage],
+        bottomNavigationBar: generateBottomNavegationBar(),
+        drawer: generateDrawer(context),
       ),
-      body: _pages[_currentPage],
-      bottomNavigationBar: generateBottomNavegationBar(),
-      drawer: generateDrawer(context),
     );
   }
 

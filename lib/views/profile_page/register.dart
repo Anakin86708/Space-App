@@ -5,7 +5,7 @@ import 'package:space_app/bloc/profile/profileEvents.dart';
 import 'package:space_app/bloc/profile/profileStates.dart';
 
 class Register extends StatefulWidget {
-  final ProfileState state;
+  final AuthState state;
   final BuildContext context;
   const Register(this.context, this.state) : super();
 
@@ -14,7 +14,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  final ProfileState state;
+  final AuthState state;
   final BuildContext context;
   final GlobalKey<FormState> formKey = new GlobalKey();
   final SendDataEvent data = SendDataEvent();
@@ -39,7 +39,7 @@ class _RegisterState extends State<Register> {
     ));
   }
 
-  Widget _emailFormField(ProfileState state) {
+  Widget _emailFormField(AuthState state) {
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: TextFormField(
@@ -53,7 +53,7 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  Widget _passwordFormField(ProfileState state) {
+  Widget _passwordFormField(AuthState state) {
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: TextFormField(
@@ -74,7 +74,7 @@ class _RegisterState extends State<Register> {
           if (formKey.currentState.validate()) {
             formKey.currentState.save();
             print('Pressed');
-            BlocProvider.of<ProfileBloc>(context).add(data);
+            BlocProvider.of<AuthBloc>(context).add(data);
           }
         },
         child: Text("Log in!"));
