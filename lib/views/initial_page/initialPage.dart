@@ -51,7 +51,7 @@ Widget genereteList(context, state) {
         PostData.fromEventData(state.data[index]),
       ),
     );
-  } on RangeError catch (e) {
+  } on RangeError catch (_) {
     return Center(
       child: CircularProgressIndicator(),
     );

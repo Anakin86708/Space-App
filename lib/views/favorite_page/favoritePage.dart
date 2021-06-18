@@ -6,7 +6,6 @@ import 'package:space_app/bloc/initial/initialStates.dart';
 import 'package:space_app/bloc/profile/profileBloc.dart';
 import 'package:space_app/bloc/profile/profileEvents.dart';
 import 'package:space_app/bloc/profile/profileStates.dart';
-import 'package:space_app/database/favoritesDatabase.dart';
 import 'package:space_app/model/postData.dart';
 import 'package:space_app/theme/themeData.dart';
 import 'package:space_app/views/interfacePage.dart';
@@ -64,7 +63,7 @@ class _FavoritePageState extends State<FavoritePage> {
         itemBuilder: (context, index) =>
             _dataItemBuilder(context, state, index),
       );
-    } on Exception catch (e) {
+    } on Exception catch (_) {
       return _buildEmpty();
     }
   }

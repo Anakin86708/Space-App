@@ -12,18 +12,16 @@ class FavoriteDatabase {
       FirebaseFirestore.instance.collection('favorites');
 
   Future<List<int>> getFavorites() async {
-    List<int> favorites = [];
     DocumentSnapshot snapshot = await favoritesCollection.doc(user.uid).get();
     try {
       if (snapshot.data() == null) {
         throw Exception();
       }
-      favorites.addAll((snapshot.data() as Map)['index'].whereType<int>());
-      favoritesIDs = favorites;
-    } on Exception catch (e) {
+      favoritesIDs.addAll((snapshot.data() as Map)['index'].whereType<int>());
+    } on Exception catch (_) {
       print('Empty favorites');
     }
-    return favorites;
+    return favoritesIDs;
   }
 
   insertFavorite(int indexToInsert) async {
@@ -36,12 +34,6 @@ class FavoriteDatabase {
     List currentList = await getFavorites()
       ..remove(indexToRemove);
     await favoritesCollection.doc(user.uid)
-        // .collection(_favoriteCollectionName)
-        // .doc('index')
         .set({'index': currentList});
-  }
-
-  bool userNotExists() {
-    return favoritesCollection.doc(user.uid).get() == null;
   }
 }

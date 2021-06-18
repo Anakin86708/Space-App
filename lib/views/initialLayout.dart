@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:space_app/bloc/profile/profileBloc.dart';
-import 'package:space_app/bloc/profile/profileEvents.dart';
 import 'package:space_app/bloc/profile/profileStates.dart';
 import 'package:space_app/theme/appColors.dart';
 import 'package:space_app/theme/themeData.dart';
 import 'package:space_app/views/favorite_page/favoritePage.dart';
 import 'package:space_app/views/initial_page/initialPage.dart';
 import 'package:space_app/views/interfacePage.dart';
-import 'package:space_app/views/profile_page/profilePage.dart';
 import 'package:space_app/views/profile_page/wrapperProfile.dart';
 
 class InitialLayout extends StatefulWidget {

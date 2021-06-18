@@ -37,7 +37,7 @@ class AstronautsPage extends StatelessWidget {
           child: new AstronautGridCard.fromAstronautData(state.data[index]),
         ),
       );
-    } on Exception catch (e) {
+    } on Exception catch (_) {
       return Center(
         child: CircularProgressIndicator(),
       );
