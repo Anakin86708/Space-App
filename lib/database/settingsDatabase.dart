@@ -33,7 +33,7 @@ class SettingsDatabaseLocalServer {
     String path = directory.path + "settings.db";
 
     Database notesDatabase = await openDatabase(path,
-        version: 3, onCreate: _createDb, onUpgrade: _upgradeDB);
+        version: 6, onCreate: _createDb, onUpgrade: _upgradeDB);
     return notesDatabase;
   }
 
@@ -63,6 +63,9 @@ class SettingsDatabaseLocalServer {
   Future<void> _createLastUpdateTable(Database db) async {
     await db.execute(
         "CREATE TABLE $_lastUpdateName (id INTEGER PRIMARY KEY AUTOINCREMENT, $_lastUpdateDate DATE)");
+    await db.rawInsert(
+        "INSERT INTO $_lastUpdateName ($_lastUpdateDate) VALUES (datetime('now','-1 year', 'localtime'))");
+    print('table $_lastUpdateName ok');
   }
 
   Future<SettingsData> getSettingsData() async {
@@ -96,8 +99,8 @@ class SettingsDatabaseLocalServer {
 
   setLastUpdateDateNow() async {
     Database db = await this.database;
-    await db.rawInsert(
-        "INSERT INTO $_lastUpdateName ($_lastUpdateDate) VALUES (datetime('now', 'localtime'))");
+    await db.rawUpdate(
+        "UPDATE $_lastUpdateName SET $_lastUpdateDate = datetime('now', 'localtime')");
   }
 
   Future<String> getUpdateFrequency() async {

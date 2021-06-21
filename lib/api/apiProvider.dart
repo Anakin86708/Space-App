@@ -95,7 +95,7 @@ class APIProvider {
     return list;
   }
 
-  static Future<bool> needNewData() async {
+  static Future<bool> needNewData() async {    
     DateTime now = DateTime.now();
     print('Now: $now');
     String updateInterval =

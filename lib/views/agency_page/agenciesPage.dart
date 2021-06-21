@@ -64,11 +64,18 @@ class AgenciesPage extends StatelessWidget {
     );
   }
 
-  Image generateImage() {
-    return Image.network(
-      data.imageUrl,
-      fit: BoxFit.fill,
-    );
+  generateImage() {
+    try {
+      return FadeInImage(
+        placeholder: AssetImage('assets/images/loading.gif'),
+        image: data.imageUrl != ''
+            ? NetworkImage(data.imageUrl,)
+            : AssetImage('assets/images/404.png'),
+            fit: BoxFit.fill,
+      );
+    } on Exception catch (_) {
+      return Image.asset('assets/images/404.png');
+    }
   }
 
   Text _generateTitle() {
