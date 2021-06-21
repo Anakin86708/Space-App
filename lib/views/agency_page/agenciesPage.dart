@@ -69,7 +69,7 @@ class AgenciesPage extends StatelessWidget {
       return FadeInImage(
         placeholder: AssetImage('assets/images/loading.gif'),
         image: data.imageUrl != ''
-            ? NetworkImage(data.imageUrl,)
+            ? NetworkImage(data.imageUrl)
             : AssetImage('assets/images/404.png'),
             fit: BoxFit.fill,
       );
