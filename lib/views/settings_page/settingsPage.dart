@@ -3,9 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:space_app/bloc/database/databaseBloc.dart';
 import 'package:space_app/bloc/database/databaseEvents.dart';
 import 'package:space_app/bloc/settings/settingsBloc.dart';
+import 'package:space_app/bloc/settings/settingsEvents.dart';
+// import 'package:space_app/bloc/settings/settingsEvents.dart';
 import 'package:space_app/bloc/settings/settingsStates.dart';
 import 'package:space_app/model/settingsData.dart';
 import 'package:space_app/theme/appColors.dart';
+import 'package:space_app/theme/themeData.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -33,9 +36,8 @@ class _SettingsPageState extends State<SettingsPage> {
       key: formKey,
       child: ListView(
         children: [
-          _eventNotificationItem(context, state),
-          _onlyFavoriteItem(context, state),
           _updateFrequencyItem(context, state),
+          _clearFilesItem(context, state),
         ],
       ),
     );
@@ -49,7 +51,7 @@ class _SettingsPageState extends State<SettingsPage> {
         onChanged: (bool value) {
           state.data.eventNotificationsState = value;
           BlocProvider.of<DatabaseBloc>(context)
-              .add(UpdateSettingsEvent(state.data));
+              .add(UpdateDBSettingsEvent(state.data));
         },
       ),
     );
@@ -64,7 +66,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ? (bool value) {
                 state.data.onlyFavoriteState = value;
                 BlocProvider.of<DatabaseBloc>(context)
-                    .add(UpdateSettingsEvent(state.data));
+                    .add(UpdateDBSettingsEvent(state.data));
               }
             : null,
       ),
@@ -80,7 +82,7 @@ class _SettingsPageState extends State<SettingsPage> {
         onChanged: (value) {
           state.data.updateFrequencyValue = value;
           BlocProvider.of<DatabaseBloc>(context)
-              .add(UpdateSettingsEvent(state.data));
+              .add(UpdateDBSettingsEvent(state.data));
         },
         underline: Container(
           color: AppColors.accent,
@@ -94,4 +96,39 @@ class _SettingsPageState extends State<SettingsPage> {
       SettingsData.availableUpdatesFrequency
           .map((e) => new DropdownMenuItem(value: e, child: Text(e)))
           .toList();
+
+  _clearFilesItem(BuildContext context, state) {
+    return ListTile(
+      title: Text('Clean local data'),
+      trailing: ElevatedButton(
+        style: AppTheme.destructiveButton,
+        child: Text('Clean'),
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    elevation: 5,
+                    content: Text(
+                        'This will remove all local data, requiring an internet connection to retrieve the data. Do you want to proceed?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          BlocProvider.of<SettingsBloc>(context)
+                              .add(ClearSettingsDatabase());
+                              Navigator.of(context).pop();
+                        },
+                        child: Text('Yes'),
+                        style: AppTheme.destructiveButton,
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('No'))
+                    ],
+                  ));
+        },
+      ),
+    );
+  }
 }

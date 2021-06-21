@@ -15,3 +15,5 @@ class UpdateSettingsEvent extends SettingsEvents {
     this.data = data ?? SettingsData();
   }
 }
+
+class ClearSettingsDatabase extends SettingsEvents {}

@@ -8,6 +8,7 @@ import 'package:sqflite/sqflite.dart';
 
 class APIDatabase {
   static const String FILENAME = '/api_data.db';
+  static const _databaseVersion = 9;
 
   static Database _database;
   static APIDatabase helper = APIDatabase._createInstance();
@@ -26,7 +27,7 @@ class APIDatabase {
     String path = directory.path + FILENAME;
     print('Initialized database');
     Database db = await openDatabase(path,
-        version: 9, onCreate: _createDB, onUpgrade: _upgradeDB);
+        version: _databaseVersion, onCreate: _createDB, onUpgrade: _upgradeDB);
     return db;
   }
 
@@ -93,5 +94,10 @@ class APIDatabase {
   Future<int> insertAgency(AgencyData data) async {
     Database db = await this.database;
     return await db.insert(AgencyData.agencyTable, data.asMap());
+  }
+
+  clearDatabase() async {
+    Database db = await this.database;
+    _upgradeDB(db, _databaseVersion+1, 0);
   }
 }

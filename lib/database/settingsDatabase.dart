@@ -39,7 +39,10 @@ class SettingsDatabaseLocalServer {
 
   _createDb(Database db, int newVersion) async {
     await _createSettingsTable(db);
+    await _insertSettings(db);
+
     await _createLastUpdateTable(db);
+    await _insertLastUpdate(db);
   }
 
   _upgradeDB(Database db, int newVersion, int _) async {
@@ -50,8 +53,10 @@ class SettingsDatabaseLocalServer {
 
   Future<void> _createSettingsTable(Database db) async {
     await db.execute(
-        "CREATE TABLE $_tableName (id INTEGER PRIMARY KEY, $_colEventNotificationState INT, $_colOnlyFavoriteState INT, $_colUpdateFrequencyState TEXT)");
-    print(SettingsData.availableUpdatesFrequency[0]);
+        "CREATE TABLE IF NOT EXISTS $_tableName (id INTEGER PRIMARY KEY, $_colEventNotificationState INT, $_colOnlyFavoriteState INT, $_colUpdateFrequencyState TEXT)");
+  }
+
+  Future<void> _insertSettings(Database db) async {
     await db.insert(_tableName, {
       'id': _id,
       _colEventNotificationState: 0,
@@ -62,7 +67,10 @@ class SettingsDatabaseLocalServer {
 
   Future<void> _createLastUpdateTable(Database db) async {
     await db.execute(
-        "CREATE TABLE $_lastUpdateName (id INTEGER PRIMARY KEY AUTOINCREMENT, $_lastUpdateDate DATE)");
+        "CREATE TABLE IF NOT EXISTS $_lastUpdateName (id INTEGER PRIMARY KEY AUTOINCREMENT, $_lastUpdateDate DATE)");
+  }
+
+  Future<void> _insertLastUpdate(Database db) async {
     await db.rawInsert(
         "INSERT INTO $_lastUpdateName ($_lastUpdateDate) VALUES (datetime('now','-1 year', 'localtime'))");
     print('table $_lastUpdateName ok');
@@ -129,6 +137,13 @@ class SettingsDatabaseLocalServer {
     convertedMap[_colUpdateFrequencyState] = data.updateFrequencyValue;
 
     return convertedMap;
+  }
+
+  clearUpdateDatabase() async {
+    Database db = await this.database;
+    await db.execute('DROP TABLE IF EXISTS $_lastUpdateName');
+    await _createLastUpdateTable(db);
+    await _insertLastUpdate(db);
   }
 
   notify() async {

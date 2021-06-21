@@ -52,4 +52,9 @@ class AppTheme {
         'textStyle': TextStyle(fontSize: 20, color: AppColors.accent),
         'textAlign': TextAlign.center,
       };
+
+  static get destructiveButton => ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.red.shade600),
+    
+      );
 }
