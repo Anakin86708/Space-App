@@ -46,10 +46,7 @@ class PostPageState extends State<PostPage> {
                 child: Align(
                   child: Padding(
                     padding: const EdgeInsets.all(13.0),
-                    child: Icon(
-                      Icons.star,
-                      size: 35,
-                    ),
+                    child: _buildStarButton(context),
                   ),
                   alignment: Alignment.topRight,
                 ),
@@ -74,6 +71,38 @@ class PostPageState extends State<PostPage> {
           generateElevatedButton(),
           SizedBox(height: 20),
         ],
+      ),
+    );
+  }
+
+    IconButton _buildStarButton(BuildContext context) {
+    Icon starIcon = widget.data.isFavorited
+        ? Icon(Icons.star, color: AppTheme.cardStyle['starColor'], size: 35)
+        : Icon(Icons.star_border, size: 35);
+    return IconButton(
+      icon: starIcon,
+      onPressed: () {
+        setState(() {
+          widget.data.isFavorited = !widget.data.isFavorited;
+        });
+        if (!widget.data.isFavorited)
+          ScaffoldMessenger.of(context).showSnackBar(_buildSnackBar());
+      },
+    );
+  }
+
+  SnackBar _buildSnackBar() {
+    return SnackBar(
+      content: Text('Item removido dos favoritos'),
+      elevation: 2,
+      duration: Duration(seconds: 5),
+      action: SnackBarAction(
+        label: 'Desfazer',
+        onPressed: () {
+          setState(() {
+            widget.data.isFavorited = !widget.data.isFavorited;
+          });
+        },
       ),
     );
   }
@@ -150,10 +179,6 @@ class PostPageState extends State<PostPage> {
   }
 
   _launchURL(url) async {
-    if (await canLaunch(url)) {
       await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 }
