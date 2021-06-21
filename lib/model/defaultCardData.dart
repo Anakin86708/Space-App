@@ -15,6 +15,9 @@ abstract class DefaultCardData {
 
   buildImage() {
     try {
+      if (imageUrl == '') {
+        throw Exception();
+      }
       return FadeInImage(
         placeholder: AssetImage('assets/images/loading.gif'),
         image: imageUrl != ''
@@ -29,7 +32,9 @@ abstract class DefaultCardData {
   bool get isFavorited => _isFavorited;
 
   set isFavorited(bool value) {
-    value ? FavoriteDatabase.helper.insertFavorite(id) : FavoriteDatabase.helper.removeFavorite(id);
+    value
+        ? FavoriteDatabase.helper.insertFavorite(id)
+        : FavoriteDatabase.helper.removeFavorite(id);
     _isFavorited = value;
   }
 }

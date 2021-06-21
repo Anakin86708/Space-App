@@ -20,7 +20,6 @@ class DataBloc extends Bloc<DataEvents, DataStates> {
     } else if (event is RequestListFavorite) {
       List<EventData> data = await _getEventsData();
       List<int> favoritesIDs = await FavoriteDatabase.helper.getFavorites();
-      print('Favorites: $favoritesIDs');
       List<EventData> favoriteData = []..addAll(
           data.where((element) => favoritesIDs.contains(element.serverID)));
 
