@@ -33,8 +33,7 @@ class _FavoritePageState extends State<FavoritePage> {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state is SuccessLoggedState) {
-          BlocProvider.of<DataBloc>(context)
-              .add(RequestListFavorite());
+          BlocProvider.of<DataBloc>(context).add(RequestListFavorite());
           return _buildListFavorites(state);
         }
         return _buildLoginMessage(context);
@@ -80,7 +79,7 @@ class _FavoritePageState extends State<FavoritePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Uma conta, todos seus favoritos\nonde quer que esteja',
+            'One account, all your favorites\nwherever you are',
             style: AppTheme.titleForFavorites['textStyle'],
             textAlign: AppTheme.titleForFavorites['textAlign'],
           ),
@@ -98,14 +97,14 @@ class _FavoritePageState extends State<FavoritePage> {
       onPressed: () {
         BlocProvider.of<AuthBloc>(context).add(ChangeToRegisterEvent());
       },
-      child: Text('Criar uma'),
+      child: Text('Create One'),
     );
   }
 
   Widget _buildEmpty() {
     return Center(
       child: Text(
-        'Parece que você ainda não tem itens favoritos',
+        'Looks like you don\'t have favorite items yet.',
         style: AppTheme.titleForFavorites['textStyle'],
         textAlign: AppTheme.titleForFavorites['textAlign'],
       ),

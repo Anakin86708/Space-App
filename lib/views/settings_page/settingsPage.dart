@@ -22,7 +22,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ajustes'),
+        title: Text('Settings'),
       ),
       body: BlocBuilder<SettingsBloc, SettingsStates>(
         builder: (BuildContext context, state) =>
@@ -45,7 +45,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   ListTile _eventNotificationItem(BuildContext context, state) {
     return ListTile(
-      title: Text('Notificação de eventos'),
+      title: Text('Event Notification'),
       trailing: Switch(
         value: state.data.eventNotificationsState,
         onChanged: (bool value) {
@@ -59,7 +59,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   ListTile _onlyFavoriteItem(BuildContext context, state) {
     return ListTile(
-      title: Text('Apenas eventos favoritos'),
+      title: Text('Favorite Events Only'),
       trailing: Switch(
         value: state.data.onlyFavoriteState,
         onChanged: state.data.eventNotificationsState
@@ -75,7 +75,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   ListTile _updateFrequencyItem(BuildContext context, state) {
     return ListTile(
-      title: Text('Frequência de atualização'),
+      title: Text('Update Frequency'),
       trailing: DropdownButton<String>(
         value: state.data.updateFrequencyValue,
         items: _generateListItens(),
