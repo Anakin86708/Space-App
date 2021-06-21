@@ -4,6 +4,7 @@ import 'package:space_app/model/api/agencyData.dart';
 import 'package:space_app/model/api/astronautData.dart';
 import 'package:space_app/model/api/eventData.dart';
 import 'package:space_app/model/settingsData.dart';
+import 'package:space_app/model/api/issData.dart';
 
 class APIProvider {
   static APIProvider helper = APIProvider._createInstance();
@@ -15,6 +16,8 @@ class APIProvider {
   static const String _eventsEndpoint = 'event/';
   static const String _astronautsEndpoint = 'astronaut/';
   static const String _agenciesEndpoint = 'agencies/';
+  static const String _issEndpoint =
+      'spacestation/?name=International Space Station';
 
   Future<List<EventData>> getAllEvents() async {
     List<EventData> list = [];
@@ -130,5 +133,29 @@ class APIProvider {
       return 24;
     }
     return 0;
+  }
+
+  Future<List<IssData>> getIss() async {
+    List<IssData> list = [];
+
+    String requestUrl = _apiURL + _issEndpoint;
+    Response response;
+    try {
+      response = await _dio.request(requestUrl,
+          options:
+              Options(method: 'GET', headers: {"Accept": "application/json"}));
+    } on Exception catch (e) {
+      print('Error while getting API data\n' + e.toString());
+      return [];
+    }
+
+    List results = response.data['results'];
+
+    results.forEach((element) {
+      list.add(IssData.fromMapAPI(element));
+    });
+    requestUrl = response.data['next'];
+
+    return list;
   }
 }
