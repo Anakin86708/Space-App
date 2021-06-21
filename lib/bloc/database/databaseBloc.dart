@@ -10,7 +10,7 @@ class DatabaseBloc extends Bloc<DatabaseEvents, DatabaseStates> {
   Stream<DatabaseStates> mapEventToState(DatabaseEvents event) async* {
     if (event is UpdateSettingsEvent) {
       // Atualiza informações no bd
-      SettingsDatabaseLocalServer.helper.updateNote(event.data);
+      SettingsDatabaseLocalServer.helper.updateSettings(event.data);
       yield UpdateState(event.data);
     }
   }

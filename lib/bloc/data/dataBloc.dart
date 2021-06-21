@@ -4,6 +4,7 @@ import 'package:space_app/bloc/data/dataEvents.dart';
 import 'package:space_app/bloc/data/dataStates.dart';
 import 'package:space_app/database/apiDatabase.dart';
 import 'package:space_app/database/favoritesDatabase.dart';
+import 'package:space_app/database/settingsDatabase.dart';
 import 'package:space_app/model/api/eventData.dart';
 
 class DataBloc extends Bloc<DataEvents, DataStates> {
@@ -29,9 +30,10 @@ class DataBloc extends Bloc<DataEvents, DataStates> {
 
   Future<List<EventData>> _getEventsData() async {
     List<EventData> data;
-    if (_needNewData()) {
+    if (await APIProvider.needNewData()) {
       print('Getting data from API');
       data = await APIProvider.helper.getAllEvents();
+      SettingsDatabaseLocalServer.helper.setLastUpdateDateNow();
     } else {
       // Get data from db
       print('Getting data from DB');
@@ -42,10 +44,6 @@ class DataBloc extends Bloc<DataEvents, DataStates> {
       }
     }
     return data;
-  }
-
-  bool _needNewData() {
-    return false; // TODO: implementar o tempo para atualizar dados
   }
 
   Future<List<EventData>> _getAndSaveDataFromAPI() async {

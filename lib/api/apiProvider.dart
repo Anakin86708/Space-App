@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:space_app/database/settingsDatabase.dart';
 import 'package:space_app/model/api/agencyData.dart';
 import 'package:space_app/model/api/astronautData.dart';
 import 'package:space_app/model/api/eventData.dart';
+import 'package:space_app/model/settingsData.dart';
 
 class APIProvider {
   static APIProvider helper = APIProvider._createInstance();
@@ -91,5 +93,42 @@ class APIProvider {
     requestUrl = response.data['next'];
 
     return list;
+  }
+
+  static Future<bool> needNewData() async {
+    DateTime now = DateTime.now();
+    print('Now: $now');
+    String updateInterval =
+        await SettingsDatabaseLocalServer.helper.getUpdateFrequency();
+    SettingsDatabaseLocalServer.helper
+        .getSettingsData()
+        .then((value) => updateInterval = value.updateFrequencyValue);
+    DateTime lastUpdateDate =
+        await SettingsDatabaseLocalServer.helper.getLastUpdateDate();
+    print('Last update: $lastUpdateDate');
+
+    double intervalInHours = _getUpdateIntervalFromSettings(updateInterval);
+    var diference = now.difference(lastUpdateDate);
+
+    print('Diference: $diference');
+    print('Result: ${diference.inDays > intervalInHours}');
+    return diference.inDays > intervalInHours;
+  }
+
+  static double _getUpdateIntervalFromSettings(String updateInterval) {
+    if (updateInterval == SettingsData.availableUpdatesFrequency[0]) {
+      return 0.5;
+    } else if (updateInterval == SettingsData.availableUpdatesFrequency[1]) {
+      return 1;
+    } else if (updateInterval == SettingsData.availableUpdatesFrequency[2]) {
+      return 2;
+    } else if (updateInterval == SettingsData.availableUpdatesFrequency[3]) {
+      return 6;
+    } else if (updateInterval == SettingsData.availableUpdatesFrequency[4]) {
+      return 12;
+    } else if (updateInterval == SettingsData.availableUpdatesFrequency[5]) {
+      return 24;
+    }
+    return 0;
   }
 }

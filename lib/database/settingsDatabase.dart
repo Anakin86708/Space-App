@@ -6,7 +6,8 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
 class SettingsDatabaseLocalServer {
-  static SettingsDatabaseLocalServer helper = SettingsDatabaseLocalServer._createInstance();
+  static SettingsDatabaseLocalServer helper =
+      SettingsDatabaseLocalServer._createInstance();
   SettingsDatabaseLocalServer._createInstance();
 
   static Database _database;
@@ -16,6 +17,9 @@ class SettingsDatabaseLocalServer {
   String _colOnlyFavoriteState = 'only_favorite';
   String _colUpdateFrequencyState = 'update_frequency';
   int _id = 1;
+
+  String _lastUpdateName = 'last_update';
+  String _lastUpdateDate = 'update_date';
 
   Future<Database> get database async {
     if (_database == null) {
@@ -28,12 +32,23 @@ class SettingsDatabaseLocalServer {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = directory.path + "settings.db";
 
-    Database notesDatabase =
-        await openDatabase(path, version: 1, onCreate: _createDb);
+    Database notesDatabase = await openDatabase(path,
+        version: 3, onCreate: _createDb, onUpgrade: _upgradeDB);
     return notesDatabase;
   }
 
   _createDb(Database db, int newVersion) async {
+    await _createSettingsTable(db);
+    await _createLastUpdateTable(db);
+  }
+
+  _upgradeDB(Database db, int newVersion, int _) async {
+    await db.execute('DROP TABLE IF EXISTS $_lastUpdateName');
+    await db.execute('DROP TABLE IF EXISTS $_tableName');
+    await _createDb(db, newVersion);
+  }
+
+  Future<void> _createSettingsTable(Database db) async {
     await db.execute(
         "CREATE TABLE $_tableName (id INTEGER PRIMARY KEY, $_colEventNotificationState INT, $_colOnlyFavoriteState INT, $_colUpdateFrequencyState TEXT)");
     print(SettingsData.availableUpdatesFrequency[0]);
@@ -43,6 +58,11 @@ class SettingsDatabaseLocalServer {
       _colOnlyFavoriteState: 0,
       _colUpdateFrequencyState: SettingsData.availableUpdatesFrequency[0],
     });
+  }
+
+  Future<void> _createLastUpdateTable(Database db) async {
+    await db.execute(
+        "CREATE TABLE $_lastUpdateName (id INTEGER PRIMARY KEY AUTOINCREMENT, $_lastUpdateDate DATE)");
   }
 
   Future<SettingsData> getSettingsData() async {
@@ -58,7 +78,34 @@ class SettingsDatabaseLocalServer {
     return data;
   }
 
-  Future<int> updateNote(SettingsData data) async {
+  Future<DateTime> getLastUpdateDate() async {
+    Database db = await this.database;
+    var result = await db.rawQuery("SELECT * FROM $_lastUpdateName");
+    return _dbStringToDateTime(result[0][_lastUpdateDate]);
+  }
+
+  DateTime _dbStringToDateTime(String dateString) {
+    List split = dateString.split(' ');
+    String date = split[0];
+    String time = split[1];
+    List dateSplit = date.split('-').map((e) => int.parse(e)).toList();
+    List timeSplit = time.split(':').map((e) => int.parse(e)).toList();
+    return DateTime(
+        dateSplit[0], dateSplit[1], dateSplit[2], timeSplit[0], timeSplit[1]);
+  }
+
+  setLastUpdateDateNow() async {
+    Database db = await this.database;
+    await db.rawInsert(
+        "INSERT INTO $_lastUpdateName ($_lastUpdateDate) VALUES (datetime('now', 'localtime'))");
+  }
+
+  Future<String> getUpdateFrequency() async {
+    SettingsData data = await this.getSettingsData();
+    return data.updateFrequencyValue;
+  }
+
+  Future<int> updateSettings(SettingsData data) async {
     Database db = await this.database;
     var result = await db.update(
       _tableName,

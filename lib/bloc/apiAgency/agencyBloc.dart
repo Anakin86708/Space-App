@@ -19,7 +19,7 @@ class AgencyBloc extends Bloc<AgencyEvents, AgencyStates> {
   Future<List<AgencyData>> _getAgencyData() async {
     List<AgencyData> data;
 
-    if (_needNewData()) {
+    if (await APIProvider.needNewData()) {
       print('Getting data from API');
       data = await APIProvider.helper.getAllAgencies();
     } else {
@@ -32,10 +32,6 @@ class AgencyBloc extends Bloc<AgencyEvents, AgencyStates> {
       }
     }
     return data;
-  }
-
-  bool _needNewData() {
-    return false; // TODO: implementar o tempo para atualizar dados
   }
 
   Future<List<AgencyData>> _getAndSaveDataFromAPI() async {

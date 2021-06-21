@@ -17,6 +17,7 @@ class FavoriteDatabase {
       if (snapshot.data() == null) {
         throw Exception();
       }
+      // favoritesIDs = [];
       favoritesIDs.addAll((snapshot.data() as Map)['index'].whereType<int>());
     } on Exception catch (_) {
       print('Empty favorites');
@@ -25,15 +26,15 @@ class FavoriteDatabase {
   }
 
   insertFavorite(int indexToInsert) async {
-    List currentList = await getFavorites()
-      ..add(indexToInsert);
-    await favoritesCollection.doc(user.uid).set({'index': currentList});
+    favoritesIDs = await getFavorites()..add(indexToInsert);
+    favoritesIDs = Set.from(favoritesIDs).toList().cast<int>();
+    await favoritesCollection.doc(user.uid).set({'index': favoritesIDs});
   }
 
   removeFavorite(int indexToRemove) async {
-    List currentList = await getFavorites()
-      ..remove(indexToRemove);
-    await favoritesCollection.doc(user.uid)
-        .set({'index': currentList});
+    favoritesIDs = await getFavorites();
+    favoritesIDs = Set.from(favoritesIDs).toList().cast<int>();
+    favoritesIDs.remove(indexToRemove);
+    await favoritesCollection.doc(user.uid).set({'index': favoritesIDs});
   }
 }

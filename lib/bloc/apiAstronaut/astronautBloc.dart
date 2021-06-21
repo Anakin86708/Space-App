@@ -18,7 +18,7 @@ class AstronautBloc extends Bloc<AstronautEvents, AstronautStates> {
 
   Future<List<AstronautData>> _getAstronautsData() async {
     List<AstronautData> data;
-    if (_needNewData()) {
+    if (await APIProvider.needNewData()) {
       print('Getting data from API');
       data = await APIProvider.helper.getAllAstronauts();
     } else {
@@ -30,10 +30,6 @@ class AstronautBloc extends Bloc<AstronautEvents, AstronautStates> {
       }
     }
     return data;
-  }
-
-  bool _needNewData() {
-    return false; // TODO: implementar o tempo para atualizar dados
   }
 
   Future<List<AstronautData>> _getAndSaveDataFromAPI() async {
