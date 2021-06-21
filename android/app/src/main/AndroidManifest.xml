@@ -38,4 +38,8 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+     <queries>
+        <package android:name="com.example.space_app.store" />
+        <package android:name="com.example.space_app.services" />
+    </queries>
 </manifest>

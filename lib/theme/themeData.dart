@@ -55,6 +55,8 @@ class AppTheme {
 
   static get destructiveButton => ButtonStyle(
         backgroundColor: MaterialStateProperty.all(Colors.red.shade600),
-    
       );
+
+  static get ProfileTitle => TextStyle(color: AppColors.secondary, fontSize: 24);
+  static get ProfileID => TextStyle(color: AppColors.secondary, fontSize: 14);
 }

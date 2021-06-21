@@ -12,27 +12,20 @@ class AuthProvider {
   }
 
   UserData _userFromFirebaseUser(User user) {
-    return user != null ? UserData(user.uid) : null;
+    return user != null ? UserData(user.uid, user.email) : null;
   }
-
-  Future<UserData> signInAnonimo() async {
-    UserCredential authResult = await _firebaseAuth.signInAnonymously();
-    User user = authResult.user;
-    return UserData(user.uid);
-  }
-
   signInWithEmailAndPassword({String email, String password}) async {
     UserCredential authResult = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
     User user = authResult.user;
-    return UserData(user.uid);
+    return UserData(user.uid, user.email);
   }
 
   createUserWithEmailAndPassword({String email, String password}) async {
     UserCredential authResult = await _firebaseAuth
         .createUserWithEmailAndPassword(email: email, password: password);
     User user = authResult.user;
-    return UserData(user.uid);
+    return UserData(user.uid, user.email);
   }
 
   signOut() async {
