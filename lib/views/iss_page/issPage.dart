@@ -7,8 +7,6 @@ import 'package:space_app/model/api/issData.dart';
 import 'package:space_app/theme/themeData.dart';
 
 class IssPage extends StatelessWidget {
-  // static IssData data = IssData(serverID, url, name, founded, deorbited, description, orbit, imageUrl);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +15,13 @@ class IssPage extends StatelessWidget {
       ),
       body: BlocBuilder<IssBloc, IssStates>(
         builder: (context, state) {
-          return post(context, state);
+          try {
+            return post(context, state);
+          } catch (e) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
         },
       ),
     );
