@@ -11,7 +11,7 @@ class APIProvider {
   Dio _dio = Dio();
 
   static const String _apiURL =
-      'https://lldev.thespacedevs.com/2.2.0/'; // DEVELOPER API
+      'https://lldev.thespacedevs.com/2.2.0/';
   static const String _eventsEndpoint = 'event/';
   static const String _astronautsEndpoint = 'astronaut/';
   static const String _agenciesEndpoint = 'agencies/';
