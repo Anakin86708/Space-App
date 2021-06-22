@@ -14,8 +14,8 @@ class SuccessLoggedState extends AuthState {
   SuccessLoggedState(this.user);
 }
 
-class ErrorState extends AuthState {
+class MessageState extends AuthState {
   final String message;
 
-  ErrorState(this.message);
+  MessageState(this.message);
 }

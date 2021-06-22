@@ -26,7 +26,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } else if (event is ChangeToLoginEvent) {
       yield LoginState();
     } else if (event is SendDataEvent) {
-      if (state is RegisterState) {
+      if (state is RegisterState || state is UnloggedState) {
+        yield MessageState('Success!');
         yield await _registerState(event);
       } else if (state is LoginState) {
         yield await _loginState(event);
@@ -41,18 +42,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         yield SuccessLoggedState(event.data);
       }
     } else if (event is ErrorEvent) {
-      yield ErrorState(event.message);
+      yield MessageState(event.message);
     }
   }
 
   _loginState(SendDataEvent event) async {
     try {
-      UserData user =
-          await _authenticationService.signInWithEmailAndPassword(
-              email: event.email, password: event.password);
+      UserData user = await _authenticationService.signInWithEmailAndPassword(
+          email: event.email, password: event.password);
       return SuccessLoggedState(user);
     } catch (e) {
-      return ErrorState(e.toString());
+      return MessageState(e.toString());
     }
   }
 
@@ -63,11 +63,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
               email: event.email, password: event.password);
       return SuccessLoggedState(user);
     } catch (e) {
-      return ErrorState(e.toString());
+      return MessageState(e.toString());
     }
   }
 
-   close() {
+  close() {
     _authenticationStream.cancel();
     return super.close();
   }

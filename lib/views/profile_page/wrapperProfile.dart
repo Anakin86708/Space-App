@@ -28,16 +28,18 @@ class WrapperProfile extends StatelessWidget implements InterfacePage {
         return _buildFormInterface(context, state);
       },
       listener: (context, state) {
-        if (state is ErrorState) {
+        if (state is MessageState) {
           showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: Text("Server Error"),
+                  title: Text("Server Message"),
                   content: Text("${state.message}"),
                   actions: [
                     ElevatedButton(
                         onPressed: () {
+                          BlocProvider.of<AuthBloc>(context)
+                              .add(RegisterEvent());
                           Navigator.of(context).pop();
                         },
                         child: Text("Ok"))
@@ -122,8 +124,9 @@ class WrapperProfile extends StatelessWidget implements InterfacePage {
   Widget _generateChangeButton(BuildContext context, AuthState state) {
     return ElevatedButton(
       onPressed: () {
-        AuthEvent event =
-            state is LoginState ? ChangeToRegisterEvent() : ChangeToLoginEvent();
+        AuthEvent event = state is LoginState
+            ? ChangeToRegisterEvent()
+            : ChangeToLoginEvent();
         print('Changing state to $event');
         print('Current state $state');
         BlocProvider.of<AuthBloc>(context).add(event);

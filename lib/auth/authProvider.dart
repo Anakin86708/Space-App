@@ -14,6 +14,7 @@ class AuthProvider {
   UserData _userFromFirebaseUser(User user) {
     return user != null ? UserData(user.uid, user.email) : null;
   }
+
   signInWithEmailAndPassword({String email, String password}) async {
     UserCredential authResult = await _firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
@@ -25,6 +26,7 @@ class AuthProvider {
     UserCredential authResult = await _firebaseAuth
         .createUserWithEmailAndPassword(email: email, password: password);
     User user = authResult.user;
+    print('User ${user.email} created!');
     return UserData(user.uid, user.email);
   }
 
