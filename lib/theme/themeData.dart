@@ -26,6 +26,11 @@ class AppTheme {
         backgroundColor: AppColors.primary.shade600,
         iconTheme: IconThemeData(color: AppColors.secondary),
       ),
+      inputDecorationTheme: InputDecorationTheme(
+          fillColor: AppColors.secondary,
+          filled: true,
+          labelStyle: TextStyle(color: AppColors.primary[900])),
+      dividerColor: AppColors.accent,
     );
   }
 
@@ -43,4 +48,15 @@ class AppTheme {
         "contentStyle": TextStyle(fontSize: 19),
         "contentJustify": TextAlign.justify
       };
+  static get titleForFavorites => {
+        'textStyle': TextStyle(fontSize: 20, color: AppColors.accent),
+        'textAlign': TextAlign.center,
+      };
+
+  static get destructiveButton => ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.red.shade600),
+      );
+
+  static get ProfileTitle => TextStyle(color: AppColors.secondary, fontSize: 24);
+  static get ProfileID => TextStyle(color: AppColors.secondary, fontSize: 14);
 }

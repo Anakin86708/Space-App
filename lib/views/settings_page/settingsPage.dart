@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:space_app/bloc/database/databaseBloc.dart';
+import 'package:space_app/bloc/database/databaseEvents.dart';
+import 'package:space_app/bloc/settings/settingsBloc.dart';
+import 'package:space_app/bloc/settings/settingsEvents.dart';
+// import 'package:space_app/bloc/settings/settingsEvents.dart';
+import 'package:space_app/bloc/settings/settingsStates.dart';
 import 'package:space_app/model/settingsData.dart';
 import 'package:space_app/theme/appColors.dart';
+import 'package:space_app/theme/themeData.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -8,74 +16,73 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  static SettingsData data = new SettingsData();
+  final GlobalKey<FormState> formKey = new GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ajustes'),
+        title: Text('Settings'),
       ),
-      body: _generateListSettings(),
+      body: BlocBuilder<SettingsBloc, SettingsStates>(
+        builder: (BuildContext context, state) =>
+            _generateListSettings(context, state),
+      ),
     );
   }
 
-  Widget _generateListSettings() {
-    return ListView(
-      children: [
-        _eventNotificationItem(),
-        _onlyFavoriteItem(),
-        _updateFrequencyItem(),
-      ],
+  Widget _generateListSettings(BuildContext context, state) {
+    return Form(
+      key: formKey,
+      child: ListView(
+        children: [
+          _updateFrequencyItem(context, state),
+          _clearFilesItem(context, state),
+        ],
+      ),
     );
   }
 
-  ListTile _eventNotificationItem() {
-    return _generateSettingsItem();
-  }
-
-  ListTile _generateSettingsItem() {
+  ListTile _eventNotificationItem(BuildContext context, state) {
     return ListTile(
-      title: Text('Notificação de eventos'),
+      title: Text('Event Notification'),
       trailing: Switch(
-        value: data.eventNotificationsState,
+        value: state.data.eventNotificationsState,
         onChanged: (bool value) {
-          setState(() {
-            data.eventNotificationsState = value;
-          });
-          print(data);
+          state.data.eventNotificationsState = value;
+          BlocProvider.of<DatabaseBloc>(context)
+              .add(UpdateDBSettingsEvent(state.data));
         },
       ),
     );
   }
 
-  ListTile _onlyFavoriteItem() {
+  ListTile _onlyFavoriteItem(BuildContext context, state) {
     return ListTile(
-      title: Text('Apenas eventos favoritos'),
+      title: Text('Favorite Events Only'),
       trailing: Switch(
-        value: data.onlyFavoriteState,
-        onChanged: data.eventNotificationsState
+        value: state.data.onlyFavoriteState,
+        onChanged: state.data.eventNotificationsState
             ? (bool value) {
-                setState(() {
-                  data.onlyFavoriteState = value;
-                });
-                print(data);
+                state.data.onlyFavoriteState = value;
+                BlocProvider.of<DatabaseBloc>(context)
+                    .add(UpdateDBSettingsEvent(state.data));
               }
             : null,
       ),
     );
   }
 
-  ListTile _updateFrequencyItem() {
+  ListTile _updateFrequencyItem(BuildContext context, state) {
     return ListTile(
-      title: Text('Frequência de atualização'),
+      title: Text('Update Frequency'),
       trailing: DropdownButton<String>(
-        value: data.updateFrequencyValue,
+        value: state.data.updateFrequencyValue,
         items: _generateListItens(),
         onChanged: (value) {
-          setState(() {
-            data.updateFrequencyValue = value;
-          });
-          print(data);
+          state.data.updateFrequencyValue = value;
+          BlocProvider.of<DatabaseBloc>(context)
+              .add(UpdateDBSettingsEvent(state.data));
         },
         underline: Container(
           color: AppColors.accent,
@@ -86,7 +93,42 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   List<DropdownMenuItem<dynamic>> _generateListItens() =>
-      SettingsData.avaliableUpdatesFrequency
+      SettingsData.availableUpdatesFrequency
           .map((e) => new DropdownMenuItem(value: e, child: Text(e)))
           .toList();
+
+  _clearFilesItem(BuildContext context, state) {
+    return ListTile(
+      title: Text('Clean local data'),
+      trailing: ElevatedButton(
+        style: AppTheme.destructiveButton,
+        child: Text('Clean'),
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    elevation: 5,
+                    content: Text(
+                        'This will remove all local data, requiring an internet connection to retrieve the data. Do you want to proceed?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          BlocProvider.of<SettingsBloc>(context)
+                              .add(ClearSettingsDatabase());
+                              Navigator.of(context).pop();
+                        },
+                        child: Text('Yes'),
+                        style: AppTheme.destructiveButton,
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('No'))
+                    ],
+                  ));
+        },
+      ),
+    );
+  }
 }
